@@ -5,6 +5,7 @@
  */
 package com.gguo.trackingguru;
 
+import com.gguo.util.Utilities;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,8 @@ import org.jsoup.select.Elements;
  * @author gguo
  */
 public class Tracking extends javax.swing.JFrame {
+
+    private String APIConfigFilePath = "apiconfig.xml";
 
     /**
      * Creates new form Tracking
@@ -211,100 +214,106 @@ public class Tracking extends javax.swing.JFrame {
     private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed
 
         // TODO add your handling code here:
-        String url = "http://track.blueskyexpress.com.au/cgi-bin/GInfo.dll?EmmisTrack";
-        String w = "blueskyexpress";
-        String cmodel = "";
-        String cno = tf_tracking_number.getText();
-        int ntype = 0;
+//        String url = "http://track.blueskyexpress.com.au/cgi-bin/GInfo.dll?EmmisTrack";
+//        String w = "blueskyexpress";
+//        String cmodel = "";
+//        String cno = tf_tracking_number.getText();
+//        int ntype = 0;
+        String tracking_no = tf_tracking_number.getText();
 
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        try {
-            HttpPost httpPost = new HttpPost(url);
+        if (Utilities.fileExist(APIConfigFilePath)) {
 
-            List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-            nvps.add(new BasicNameValuePair("w", w));
-            nvps.add(new BasicNameValuePair("cmodel", cmodel));
-            nvps.add(new BasicNameValuePair("cno", cno));
-            nvps.add(new BasicNameValuePair("ntype", String.valueOf(ntype)));
+            CloseableHttpClient httpclient = HttpClients.createDefault();
+            try {
+                HttpPost httpPost = new HttpPost(url);
 
-            httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+                List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+                nvps.add(new BasicNameValuePair("w", w));
+                nvps.add(new BasicNameValuePair("cmodel", cmodel));
+                nvps.add(new BasicNameValuePair("cno", tracking_no));
+                nvps.add(new BasicNameValuePair("ntype", String.valueOf(ntype)));
 
-            // Create a custom response handler
-            ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-                public String handleResponse(
-                        final HttpResponse response) throws ClientProtocolException, IOException {
-                    int status = response.getStatusLine().getStatusCode();
-                    status_label.setText(response.getStatusLine().toString());
-                    if (status >= 200 && status < 300) {
-                        HttpEntity entity = response.getEntity();
-                        return entity != null ? EntityUtils.toString(entity) : null;
-                    } else {
-                        throw new ClientProtocolException("Unexpected response status: " + status);
+                httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+
+                // Create a custom response handler
+                ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
+                    public String handleResponse(
+                            final HttpResponse response) throws ClientProtocolException, IOException {
+                        int status = response.getStatusLine().getStatusCode();
+                        status_label.setText(response.getStatusLine().toString());
+                        if (status >= 200 && status < 300) {
+                            HttpEntity entity = response.getEntity();
+                            return entity != null ? EntityUtils.toString(entity) : null;
+                        } else {
+                            throw new ClientProtocolException("Unexpected response status: " + status);
+                        }
+                    }
+                };
+                String responseBody = httpclient.execute(httpPost, responseHandler);
+            //System.out.println("----------------------------------------");
+                //System.out.println(responseBody);
+
+                //tp_result.setText(responseBody);
+                Document htmlDoc = Jsoup.parse(responseBody);
+                tracking_number.setText(htmlDoc.getElementById("HeaderNum").text());
+                tracking_status.setText(htmlDoc.getElementById("HeaderState").text());
+                tracking_from.setText(htmlDoc.getElementById("HeaderFrom").text());
+                tracking_to.setText(htmlDoc.getElementById("HeaderDes").text());
+                tracking_quantity.setText(htmlDoc.getElementById("HeaderItem").text());
+
+                Element tableElement = htmlDoc.getElementById("oTHtable");
+
+                Vector<String> tableHeaders = new Vector<String>();
+                Vector tableData = new Vector();
+
+                for (Element header : tableElement.select("tr:eq(0)")) {
+                    Elements tds = header.select("td:not([rowspan])");//tds without attr=rowspan
+                    for (Element td : tds) {
+                        //System.out.println("header"+td.text());
+                        tableHeaders.add(td.text());
                     }
                 }
-            };
-            String responseBody = httpclient.execute(httpPost, responseHandler);
-            //System.out.println("----------------------------------------");
-            //System.out.println(responseBody);
 
-            //tp_result.setText(responseBody);
-            Document htmlDoc = Jsoup.parse(responseBody);
-            tracking_number.setText(htmlDoc.getElementById("HeaderNum").text());
-            tracking_status.setText(htmlDoc.getElementById("HeaderState").text());
-            tracking_from.setText(htmlDoc.getElementById("HeaderFrom").text());
-            tracking_to.setText(htmlDoc.getElementById("HeaderDes").text());
-            tracking_quantity.setText(htmlDoc.getElementById("HeaderItem").text());
-
-            Element tableElement = htmlDoc.getElementById("oTHtable");
-
-            Vector<String> tableHeaders = new Vector<String>();
-            Vector tableData = new Vector();
-
-            for (Element header : tableElement.select("tr:eq(0)")) {
-                Elements tds = header.select("td:not([rowspan])");//tds without attr=rowspan
-                for (Element td : tds) {
-                    //System.out.println("header"+td.text());
-                    tableHeaders.add(td.text());
+                for (Element row : tableElement.select("tr:gt(0)")) {
+                    Elements tds = row.select("td:not([rowspan])");//tds without attr=rowspan
+                    Vector<Object> oneRow = new Vector<Object>();
+                    for (Element td : tds) {
+                        //System.out.println(td.text());
+                        oneRow.add(td.text());
+                    }
+                    tableData.add(oneRow);
                 }
-            }
-
-            for (Element row : tableElement.select("tr:gt(0)")) {
-                Elements tds = row.select("td:not([rowspan])");//tds without attr=rowspan
-                Vector<Object> oneRow = new Vector<Object>();
-                for (Element td : tds) {
-                    //System.out.println(td.text());
-                    oneRow.add(td.text());
-                }
-                tableData.add(oneRow);
-            }
-            tracking_table.setModel(new DefaultTableModel(tableData, tableHeaders));
+                tracking_table.setModel(new DefaultTableModel(tableData, tableHeaders));
 
             //            CloseableHttpResponse response2 = httpclient.execute(httpPost);
-            //            try {
-            //                System.out.println(response2.getStatusLine());
-            //
-            //                HttpEntity entity2 = response2.getEntity();
-            //                // do something useful with the response body
-            //                // and ensure it is fully consumed
-            //                  tp_result.setText(EntityUtils.toString(entity2));
-            //                  EntityUtils.consume(entity2);
-            //            } catch (IOException ex) {
-            //                Logger.getLogger(Tracking.class.getName()).log(Level.SEVERE, null, ex);
-            //            } finally {
-            //                try {
-            //                    response2.close();
-            //                } catch (IOException ex) {
-            //                    Logger.getLogger(Tracking.class.getName()).log(Level.SEVERE, null, ex);
-            //                }
-            //            }
-        } catch (IOException ex) {
-            Logger.getLogger(Tracking.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                httpclient.close();
+                //            try {
+                //                System.out.println(response2.getStatusLine());
+                //
+                //                HttpEntity entity2 = response2.getEntity();
+                //                // do something useful with the response body
+                //                // and ensure it is fully consumed
+                //                  tp_result.setText(EntityUtils.toString(entity2));
+                //                  EntityUtils.consume(entity2);
+                //            } catch (IOException ex) {
+                //                Logger.getLogger(Tracking.class.getName()).log(Level.SEVERE, null, ex);
+                //            } finally {
+                //                try {
+                //                    response2.close();
+                //                } catch (IOException ex) {
+                //                    Logger.getLogger(Tracking.class.getName()).log(Level.SEVERE, null, ex);
+                //                }
+                //            }
             } catch (IOException ex) {
                 Logger.getLogger(Tracking.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    httpclient.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(Tracking.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
+        } else {
+            new APISettingFrame().setVisible(true);
         }
     }//GEN-LAST:event_btn_searchActionPerformed
 
