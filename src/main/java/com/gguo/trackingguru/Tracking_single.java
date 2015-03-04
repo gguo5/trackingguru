@@ -6,16 +6,12 @@
 package com.gguo.trackingguru;
 
 import com.gguo.util.Utilities;
-import java.awt.Desktop;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -37,14 +33,14 @@ import org.jsoup.select.Elements;
  *
  * @author gguo
  */
-public class Tracking extends javax.swing.JFrame {
+public class Tracking_single extends javax.swing.JFrame {
 
     private String APIConfigFilePath = "apiconfig.xml";
 
     /**
      * Creates new form Tracking
      */
-    public Tracking() {
+    public Tracking_single() {
         initComponents();
     }
 
@@ -58,14 +54,18 @@ public class Tracking extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        tf_tracking_number = new javax.swing.JTextField();
         btn_search = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        tracking_number = new javax.swing.JLabel();
+        tracking_status = new javax.swing.JLabel();
+        tracking_from = new javax.swing.JLabel();
+        tracking_to = new javax.swing.JLabel();
+        tracking_quantity = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tracking_table = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         status_label = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tf_tracking_number = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mi_exit = new javax.swing.JMenuItem();
@@ -76,6 +76,8 @@ public class Tracking extends javax.swing.JFrame {
         setTitle("Tracking Guru");
 
         jLabel1.setText("Tracking Number");
+
+        tf_tracking_number.setText("BS666112948MEL");
 
         btn_search.setText("Search");
         btn_search.addActionListener(new java.awt.event.ActionListener() {
@@ -93,11 +95,6 @@ public class Tracking extends javax.swing.JFrame {
             }
         ));
         tracking_table.getTableHeader().setReorderingAllowed(false);
-        tracking_table.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tracking_tableMouseClicked(evt);
-            }
-        });
         jScrollPane2.setViewportView(tracking_table);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -106,13 +103,35 @@ public class Tracking extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 637, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 552, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tracking_from, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tracking_number, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tracking_status, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tracking_to, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(36, 36, 36)
+                        .addComponent(tracking_quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(tracking_status, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tracking_number, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(tracking_to, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tracking_from, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tracking_quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
         );
 
@@ -132,12 +151,6 @@ public class Tracking extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-
-        tf_tracking_number.setColumns(20);
-        tf_tracking_number.setLineWrap(true);
-        tf_tracking_number.setRows(5);
-        tf_tracking_number.setText("BS666112947MEL BS666112948MEL");
-        jScrollPane1.setViewportView(tf_tracking_number);
 
         jMenu1.setMnemonic('F');
         jMenu1.setText("File");
@@ -171,12 +184,12 @@ public class Tracking extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(71, 104, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tf_tracking_number, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(63, 63, 63)
                         .addComponent(btn_search)
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -184,12 +197,12 @@ public class Tracking extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap(19, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tf_tracking_number, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_search))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -209,7 +222,7 @@ public class Tracking extends javax.swing.JFrame {
         int ntype = 0;
         String tracking_no = tf_tracking_number.getText();
 
-        if (url.length() > 0) {//Utilities.fileExist(APIConfigFilePath)) {
+        if (url.length()>0){//Utilities.fileExist(APIConfigFilePath)) {
 
             CloseableHttpClient httpclient = HttpClients.createDefault();
             try {
@@ -243,13 +256,13 @@ public class Tracking extends javax.swing.JFrame {
 
                 //tp_result.setText(responseBody);
                 Document htmlDoc = Jsoup.parse(responseBody);
-//                tracking_number.setText(htmlDoc.getElementById("HeaderNum").text());
-//                tracking_status.setText(htmlDoc.getElementById("HeaderState").text());
-//                tracking_from.setText(htmlDoc.getElementById("HeaderFrom").text());
-//                tracking_to.setText(htmlDoc.getElementById("HeaderDes").text());
-//                tracking_quantity.setText(htmlDoc.getElementById("HeaderItem").text());
+                tracking_number.setText(htmlDoc.getElementById("HeaderNum").text());
+                tracking_status.setText(htmlDoc.getElementById("HeaderState").text());
+                tracking_from.setText(htmlDoc.getElementById("HeaderFrom").text());
+                tracking_to.setText(htmlDoc.getElementById("HeaderDes").text());
+                tracking_quantity.setText(htmlDoc.getElementById("HeaderItem").text());
 
-                Element tableElement = htmlDoc.getElementById("oMHtable");
+                Element tableElement = htmlDoc.getElementById("oTHtable");
 
                 Vector<String> tableHeaders = new Vector<String>();
                 Vector tableData = new Vector();
@@ -273,7 +286,7 @@ public class Tracking extends javax.swing.JFrame {
                 }
                 tracking_table.setModel(new DefaultTableModel(tableData, tableHeaders));
 
-                //            CloseableHttpResponse response2 = httpclient.execute(httpPost);
+            //            CloseableHttpResponse response2 = httpclient.execute(httpPost);
                 //            try {
                 //                System.out.println(response2.getStatusLine());
                 //
@@ -292,12 +305,12 @@ public class Tracking extends javax.swing.JFrame {
                 //                }
                 //            }
             } catch (IOException ex) {
-                Logger.getLogger(Tracking.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Tracking_single.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 try {
                     httpclient.close();
                 } catch (IOException ex) {
-                    Logger.getLogger(Tracking.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Tracking_single.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         } else {
@@ -309,31 +322,6 @@ public class Tracking extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_mi_exitActionPerformed
-
-    private void tracking_tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tracking_tableMouseClicked
-        // TODO add your handling code here:
-        JTable target = (JTable) evt.getSource();
-        int row = target.getSelectedRow();
-        int column = target.getSelectedColumn();
-        if (column == 0 || column == 7) {
-            String t_no = (String) target.getValueAt(row, 0);
-            String base_url = "http://198.11.173.181/cgi-bin/GInfo.dll?EmmisTrack&w=blueskyexpress&cno=ReplaceMe&cmodel=&ntype=0";
-            String url = base_url.replace("ReplaceMe", t_no);
-            System.out.println(url);
-
-            Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
-            if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
-                try {
-                    desktop.browse(new URI(url));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-      //System.out.println("row: "+row +" col: "+column);
-
-    }//GEN-LAST:event_tracking_tableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -352,20 +340,21 @@ public class Tracking extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Tracking.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Tracking_single.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Tracking.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Tracking_single.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Tracking.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Tracking_single.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Tracking.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Tracking_single.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Tracking().setVisible(true);
+                new Tracking_single().setVisible(true);
             }
         });
     }
@@ -377,12 +366,16 @@ public class Tracking extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JMenuItem mi_api_setting;
     private javax.swing.JMenuItem mi_exit;
     private javax.swing.JLabel status_label;
-    private javax.swing.JTextArea tf_tracking_number;
+    private javax.swing.JTextField tf_tracking_number;
+    private javax.swing.JLabel tracking_from;
+    private javax.swing.JLabel tracking_number;
+    private javax.swing.JLabel tracking_quantity;
+    private javax.swing.JLabel tracking_status;
     private javax.swing.JTable tracking_table;
+    private javax.swing.JLabel tracking_to;
     // End of variables declaration//GEN-END:variables
 }
