@@ -40,8 +40,6 @@ import org.jsoup.select.Elements;
  */
 public class Tracking extends javax.swing.JFrame {
 
-    private String APIConfigFilePath = "apiconfig.xml";
-
     /**
      * Creates new form Tracking
      */
@@ -137,7 +135,8 @@ public class Tracking extends javax.swing.JFrame {
         tf_tracking_number.setColumns(20);
         tf_tracking_number.setLineWrap(true);
         tf_tracking_number.setRows(5);
-        tf_tracking_number.setText("BS666112947MEL BS666112948MEL");
+        tf_tracking_number.setText(Utilities.setJTextAreaText());
+        tf_tracking_number.setToolTipText("Tracking numbers can be separated by either space or comma.");
         tf_tracking_number.setWrapStyleWord(true);
         jScrollPane1.setViewportView(tf_tracking_number);
 
@@ -203,23 +202,33 @@ public class Tracking extends javax.swing.JFrame {
     private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed
 
         // TODO add your handling code here:
+
+
         String url = "http://track.blueskyexpress.com.au/cgi-bin/GInfo.dll?EmmisTrack";
         String w = "blueskyexpress";
         String cmodel = "";
-        String cno = tf_tracking_number.getText();
+        //String cno = tf_tracking_number.getText();
         int ntype = 0;
         String tracking_no = tf_tracking_number.getText();
         String cleanedTracking = "";
         String errorTracking = "";
         boolean processFlag = false;
+        boolean singleNoFlag = false;
         if (tracking_no.length() > 0) {
             String[] result = validateTracking(tracking_no);
             cleanedTracking = result[1];
             processFlag = Boolean.valueOf(result[0]);
+            singleNoFlag = Boolean.valueOf(result[3]);
             errorTracking = result[2];
         }
 
         if (processFlag) {//Utilities.fileExist(APIConfigFilePath)) {
+            //save tn only when valid tracking no(s)
+            if (singleNoFlag) {
+                Utilities.saveJTextAreaToFile(cleanedTracking.substring(0,cleanedTracking.indexOf(" ")));
+            } else {
+            Utilities.saveJTextAreaToFile(cleanedTracking);
+            }
 
             CloseableHttpClient httpclient = HttpClients.createDefault();
             try {
@@ -405,20 +414,22 @@ public class Tracking extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private String[] validateTracking(String tracking_no) {
-        String[] result = new String[3];
+        String[] result = new String[4];
         boolean process = true;
         String[] trackingNos = tracking_no.split("\\s+|,"); //regex for 1 or more spaces, or comma
         StringBuilder sb = new StringBuilder();
         StringBuilder err = new StringBuilder();
-
+        boolean single = false;
         for (String tn : trackingNos) {
             if (tn.trim().matches("[a-zA-Z]{2}\\d{9}MEL")) {
                 sb.append(tn);
                 sb.append(" ");
             } else {
-                process = false;
-                err.append(tn);
-                err.append(",");
+                if (tn.length() > 0) {
+                    process = false;
+                    err.append(tn);
+                    err.append(",");
+                }
             }
         }
 
@@ -426,6 +437,7 @@ public class Tracking extends javax.swing.JFrame {
             if (sb.indexOf(" ") == sb.length() - 1) {
                 sb.append(sb.substring(0, sb.length() - 1));
                 result[1] = sb.toString();
+                single = true;
             } else {
                 result[1] = sb.substring(0, sb.length() - 1);
             }
@@ -433,7 +445,7 @@ public class Tracking extends javax.swing.JFrame {
             result[1] = sb.toString();
         }
         result[0] = process ? String.valueOf(process) : String.valueOf(process);
- 
+        result[3] = single ? String.valueOf(single) : String.valueOf(single);
         if (err.length() > 0 && String.valueOf(err.charAt(err.length() - 1)).equals(",")) {
             result[2] = err.substring(0, err.length() - 1);
         } else {
