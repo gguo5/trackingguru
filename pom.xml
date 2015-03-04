@@ -29,6 +29,8 @@
                                     <mainClass>com.gguo.trackingguru.Tracking</mainClass>
                                 </transformer>
                             </transformers>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>launcher</shadedClassifierName> 
                         </configuration>
                     </execution>
                 </executions>
