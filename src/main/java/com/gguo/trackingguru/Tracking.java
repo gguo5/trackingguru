@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.apache.http.HttpEntity;
@@ -137,6 +138,7 @@ public class Tracking extends javax.swing.JFrame {
         tf_tracking_number.setLineWrap(true);
         tf_tracking_number.setRows(5);
         tf_tracking_number.setText("BS666112947MEL BS666112948MEL");
+        tf_tracking_number.setWrapStyleWord(true);
         jScrollPane1.setViewportView(tf_tracking_number);
 
         jMenu1.setMnemonic('F');
@@ -196,7 +198,6 @@ public class Tracking extends javax.swing.JFrame {
         );
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed
@@ -208,8 +209,17 @@ public class Tracking extends javax.swing.JFrame {
         String cno = tf_tracking_number.getText();
         int ntype = 0;
         String tracking_no = tf_tracking_number.getText();
+        String cleanedTracking = "";
+        String errorTracking = "";
+        boolean processFlag = false;
+        if (tracking_no.length() > 0) {
+            String[] result = validateTracking(tracking_no);
+            cleanedTracking = result[1];
+            processFlag = Boolean.valueOf(result[0]);
+            errorTracking = result[2];
+        }
 
-        if (url.length() > 0) {//Utilities.fileExist(APIConfigFilePath)) {
+        if (processFlag) {//Utilities.fileExist(APIConfigFilePath)) {
 
             CloseableHttpClient httpclient = HttpClients.createDefault();
             try {
@@ -218,7 +228,7 @@ public class Tracking extends javax.swing.JFrame {
                 List<NameValuePair> nvps = new ArrayList<NameValuePair>();
                 nvps.add(new BasicNameValuePair("w", w));
                 nvps.add(new BasicNameValuePair("cmodel", cmodel));
-                nvps.add(new BasicNameValuePair("cno", tracking_no));
+                nvps.add(new BasicNameValuePair("cno", cleanedTracking));
                 nvps.add(new BasicNameValuePair("ntype", String.valueOf(ntype)));
 
                 httpPost.setEntity(new UrlEncodedFormEntity(nvps));
@@ -238,7 +248,7 @@ public class Tracking extends javax.swing.JFrame {
                     }
                 };
                 String responseBody = httpclient.execute(httpPost, responseHandler);
-            //System.out.println("----------------------------------------");
+                //System.out.println("----------------------------------------");
                 //System.out.println(responseBody);
 
                 //tp_result.setText(responseBody);
@@ -301,7 +311,15 @@ public class Tracking extends javax.swing.JFrame {
                 }
             }
         } else {
-            new APISettingFrame().setVisible(true);
+            //new APISettingFrame().setVisible(true);
+            //do sth if not true
+            String str = "";
+            if (errorTracking.length() > 0) {
+                str = "Invalid tracking no(s): " + errorTracking;
+            } else {
+                str = "Tracking No can't be empty!";
+            }
+            JOptionPane.showMessageDialog(null, str);
         }
     }//GEN-LAST:event_btn_searchActionPerformed
 
@@ -331,7 +349,7 @@ public class Tracking extends javax.swing.JFrame {
             }
 
         }
-      //System.out.println("row: "+row +" col: "+column);
+        //System.out.println("row: "+row +" col: "+column);
 
     }//GEN-LAST:event_tracking_tableMouseClicked
 
@@ -385,4 +403,43 @@ public class Tracking extends javax.swing.JFrame {
     private javax.swing.JTextArea tf_tracking_number;
     private javax.swing.JTable tracking_table;
     // End of variables declaration//GEN-END:variables
+
+    private String[] validateTracking(String tracking_no) {
+        String[] result = new String[3];
+        boolean process = true;
+        String[] trackingNos = tracking_no.split("\\s+|,"); //regex for 1 or more spaces, or comma
+        StringBuilder sb = new StringBuilder();
+        StringBuilder err = new StringBuilder();
+
+        for (String tn : trackingNos) {
+            if (tn.trim().matches("[a-zA-Z]{2}\\d{9}MEL")) {
+                sb.append(tn);
+                sb.append(" ");
+            } else {
+                process = false;
+                err.append(tn);
+                err.append(",");
+            }
+        }
+
+        if (sb.length() > 0) {
+            if (sb.indexOf(" ") == sb.length() - 1) {
+                sb.append(sb.substring(0, sb.length() - 1));
+                result[1] = sb.toString();
+            } else {
+                result[1] = sb.substring(0, sb.length() - 1);
+            }
+        } else {
+            result[1] = sb.toString();
+        }
+        result[0] = process ? String.valueOf(process) : String.valueOf(process);
+ 
+        if (err.length() > 0 && String.valueOf(err.charAt(err.length() - 1)).equals(",")) {
+            result[2] = err.substring(0, err.length() - 1);
+        } else {
+            result[2] = err.toString();
+        }
+        //System.out.println(sb.toString());
+        return result;
+    }
 }
