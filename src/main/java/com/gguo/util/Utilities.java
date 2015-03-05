@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -71,13 +70,13 @@ public class Utilities {
 		try {
  
 			file = new File("c:/temp/tn.txt");
-			fop = new FileOutputStream(file);
- 
+			
 			// if file doesnt exists, then create it
 			if (!file.exists()) {
 				file.createNewFile();
 			}
- 
+                        
+                        fop = new FileOutputStream(file);
 			// get the content in bytes
 			byte[] contentInBytes = content.getBytes();
  
@@ -85,7 +84,7 @@ public class Utilities {
 			fop.flush();
 			fop.close();
  
-			System.out.println("Write Done");
+			//System.out.println("Write Done");
  
 		} catch (IOException e) {
 			e.printStackTrace();
