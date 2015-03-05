@@ -6,16 +6,20 @@
 package com.gguo.trackingguru;
 
 import com.gguo.util.Utilities;
+import java.awt.Color;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import javax.swing.JLabel;
 import org.apache.log4j.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -32,14 +36,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-
 /**
  *
  * @author gguo
  */
 public class Tracking extends javax.swing.JFrame {
-    
+
     final static Logger logger = Logger.getLogger(Tracking.class.getName());
+
     /**
      * Creates new form Tracking
      */
@@ -112,7 +116,8 @@ public class Tracking extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
@@ -128,7 +133,7 @@ public class Tracking extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addComponent(status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -172,12 +177,12 @@ public class Tracking extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(32, 32, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(63, 63, 63)
+                        .addGap(35, 35, 35)
                         .addComponent(btn_search)
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -185,25 +190,25 @@ public class Tracking extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(23, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_search))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed
 
         // TODO add your handling code here:
-
-
         String url = "http://track.blueskyexpress.com.au/cgi-bin/GInfo.dll?EmmisTrack";
         String w = "blueskyexpress";
         String cmodel = "";
@@ -225,9 +230,9 @@ public class Tracking extends javax.swing.JFrame {
         if (processFlag) {//Utilities.fileExist(APIConfigFilePath)) {
             //save tn only when valid tracking no(s)
             if (singleNoFlag) {
-                Utilities.saveJTextAreaToFile(cleanedTracking.substring(0,cleanedTracking.indexOf(" ")));
+                Utilities.saveJTextAreaToFile(cleanedTracking.substring(0, cleanedTracking.indexOf(" ")));
             } else {
-            Utilities.saveJTextAreaToFile(cleanedTracking);
+                Utilities.saveJTextAreaToFile(cleanedTracking);
             }
 
             CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -292,6 +297,22 @@ public class Tracking extends javax.swing.JFrame {
                 }
                 tracking_table.setModel(new DefaultTableModel(tableData, tableHeaders));
 
+                //set column width
+                int[] width = {100, 65, 35, 25, 30, 100, 110, 50};
+                for (int i = 0; i < tracking_table.getColumnCount(); i++) {
+                    tracking_table.getColumnModel().getColumn(i).setPreferredWidth(width[i]);
+                }
+                //set table header centre horizontally
+                TableCellRenderer rendererFromHeader = tracking_table.getTableHeader().getDefaultRenderer();
+                JLabel headerLabel = (JLabel) rendererFromHeader;
+                headerLabel.setHorizontalAlignment(JLabel.CENTER);
+                
+                //set tn column style
+//                 TableCellEditor cellRederer =  tracking_table.getCellEditor(0, 0);
+//                 tracking_table.gettable
+//                JLabel celltest = (JLabel) first_col;
+//                celltest.setBackground(Color.RED);
+
                 //            CloseableHttpResponse response2 = httpclient.execute(httpPost);
                 //            try {
                 //                System.out.println(response2.getStatusLine());
@@ -312,12 +333,12 @@ public class Tracking extends javax.swing.JFrame {
                 //            }
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Can not connect to host, try again later.");
-                logger.error("IOException",ex);
+                logger.error("IOException", ex);
             } finally {
                 try {
                     httpclient.close();
                 } catch (IOException ex) {
-                   logger.error("IOException",ex);
+                    logger.error("IOException", ex);
                 }
             }
         } else {
@@ -354,7 +375,7 @@ public class Tracking extends javax.swing.JFrame {
                 try {
                     desktop.browse(new URI(url));
                 } catch (Exception e) {
-                    logger.error("Exception",e);
+                    logger.error("Exception", e);
                 }
             }
 
