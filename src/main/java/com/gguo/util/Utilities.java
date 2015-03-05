@@ -11,14 +11,20 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.net.URL;
+import java.net.URLClassLoader;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 
 /**
  *
  * @author gguo
  */
 public class Utilities {
+
+    final static Logger logger = Logger.getLogger(Utilities.class.getName());
+   
 
     public static boolean fileExist(String path) {
         boolean flag = false;
@@ -30,7 +36,7 @@ public class Utilities {
     }
 
     public static String setJTextAreaText() {
-        String filePathString = "C:/temp/tn.txt";
+        String filePathString = "C:/TrackingGuru/tn.txt";
         String out = "";
         BufferedReader br = null;
         if (fileExist(filePathString)) {
@@ -46,56 +52,67 @@ public class Utilities {
                 }
                 out = sb.toString();
             } catch (FileNotFoundException e) {
-                Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, e);
+                logger.error("FileNotFoundException", e);
             } catch (IOException e) {
-               Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, e);
+                logger.error("IOException", e);
             } finally {
                 if (br != null) {
                     try {
                         br.close();
                     } catch (IOException ex) {
-                        Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
+                        logger.error("IOException", ex);
                     }
                 }
             }
+        } else {
+            logger.info( filePathString+ " doesn't exists.");
         }
         return out;
     }
 
     public static void saveJTextAreaToFile(String cleanedTracking) {
         FileOutputStream fop = null;
-		File file;
-		String content = cleanedTracking;
- 
-		try {
- 
-			file = new File("c:/temp/tn.txt");
-			
-			// if file doesnt exists, then create it
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-                        
-                        fop = new FileOutputStream(file);
-			// get the content in bytes
-			byte[] contentInBytes = content.getBytes();
- 
-			fop.write(contentInBytes);
-			fop.flush();
-			fop.close();
- 
+        File file;
+        String content = cleanedTracking;
+
+        try {
+
+            file = new File("c:/TrackingGuru/tn.txt");
+
+            // if file doesnt exists, then create it
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            fop = new FileOutputStream(file);
+            // get the content in bytes
+            byte[] contentInBytes = content.getBytes();
+
+            fop.write(contentInBytes);
+            fop.flush();
+            fop.close();
+
 			//System.out.println("Write Done");
+        } catch (IOException e) {
+            logger.error("IOException", e);
+        } finally {
+            try {
+                if (fop != null) {
+                    fop.close();
+                }
+            } catch (IOException e) {
+               logger.error("IOException", e);
+            }
+        }
+    }
+    
+     public static void PrintClasspath() {
+        ClassLoader cl = ClassLoader.getSystemClassLoader();
  
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (fop != null) {
-					fop.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+        URL[] urls = ((URLClassLoader)cl).getURLs();
+ 
+        for(URL url: urls){
+        	logger.debug(url);
+        }
     }
 }

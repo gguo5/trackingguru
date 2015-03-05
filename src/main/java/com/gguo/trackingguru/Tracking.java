@@ -12,8 +12,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -33,12 +32,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+
 /**
  *
  * @author gguo
  */
 public class Tracking extends javax.swing.JFrame {
-
+    
+    final static Logger logger = Logger.getLogger(Tracking.class.getName());
     /**
      * Creates new form Tracking
      */
@@ -310,12 +311,13 @@ public class Tracking extends javax.swing.JFrame {
                 //                }
                 //            }
             } catch (IOException ex) {
-                Logger.getLogger(Tracking.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Can not connect to host, try again later.");
+                logger.error("IOException",ex);
             } finally {
                 try {
                     httpclient.close();
                 } catch (IOException ex) {
-                    Logger.getLogger(Tracking.class.getName()).log(Level.SEVERE, null, ex);
+                   logger.error("IOException",ex);
                 }
             }
         } else {
@@ -352,7 +354,7 @@ public class Tracking extends javax.swing.JFrame {
                 try {
                     desktop.browse(new URI(url));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Exception",e);
                 }
             }
 
@@ -450,7 +452,6 @@ public class Tracking extends javax.swing.JFrame {
         } else {
             result[2] = err.toString();
         }
-        //System.out.println(sb.toString());
         return result;
     }
 }
