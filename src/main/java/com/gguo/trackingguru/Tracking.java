@@ -420,7 +420,6 @@ public class Tracking extends javax.swing.JFrame {
     private void tracking_tableMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tracking_tableMouseMoved
         // TODO add your handling code here:
         JTable target = (JTable) evt.getSource();
-        int row = target.rowAtPoint(evt.getPoint());
         int column = target.columnAtPoint(evt.getPoint());
         if (column == 0 || column == 7) {
             target.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
