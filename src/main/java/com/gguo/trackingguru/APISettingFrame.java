@@ -84,7 +84,8 @@ public class APISettingFrame extends javax.swing.JFrame {
                 .addContainerGap(39, Short.MAX_VALUE))
         );
 
-        pack();
+        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+        setBounds((screenSize.width-416)/2, (screenSize.height-197)/2, 416, 197);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbtn_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_cancelActionPerformed
