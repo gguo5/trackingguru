@@ -7,14 +7,19 @@ package com.gguo.util;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Properties;
+import java.util.logging.Level;
+import javax.swing.DefaultListModel;
 import org.apache.log4j.Logger;
-
 
 /**
  *
@@ -23,7 +28,6 @@ import org.apache.log4j.Logger;
 public class Utilities {
 
     final static Logger logger = Logger.getLogger(Utilities.class.getName());
-   
 
     public static boolean fileExist(String path) {
         boolean flag = false;
@@ -33,10 +37,26 @@ public class Utilities {
         }
         return flag;
     }
+    
+    public static boolean fileExist(String path, boolean create) {
+        boolean flag = false;
+        File f = new File(path);
+        if (f.exists() && !f.isDirectory()) {
+            flag = true;
+        } else{
+            try {
+                f.createNewFile();
+                flag=true;
+            } catch (IOException ex) {
+                logger.error("IOException");
+            }
+        }
+        return flag;
+    }
 
     public static String setJTextAreaText(String tabName) {
         String rootDir = "C:/TrackingGuru/";
-        String filePathString = rootDir+tabName+".txt";
+        String filePathString = rootDir + tabName + ".txt";
         String out = "";
         BufferedReader br = null;
         if (fileExist(filePathString)) {
@@ -65,7 +85,7 @@ public class Utilities {
                 }
             }
         } else {
-            logger.info( filePathString+ " doesn't exists.");
+            logger.info(filePathString + " doesn't exists.");
         }
         return out;
     }
@@ -74,11 +94,11 @@ public class Utilities {
         FileOutputStream fop = null;
         File file;
         String content = cleanedTracking;
-        
+
         String rootDir = "C:/TrackingGuru/";
-        String filePathString = rootDir+tabName+".txt";
+        String filePathString = rootDir + tabName + ".txt";
         try {
-            
+
             file = new File(filePathString);
 
             // if file doesnt exists, then create it
@@ -94,7 +114,7 @@ public class Utilities {
             fop.flush();
             fop.close();
 
-			//System.out.println("Write Done");
+            //System.out.println("Write Done");
         } catch (IOException e) {
             logger.error("IOException", e);
         } finally {
@@ -103,18 +123,72 @@ public class Utilities {
                     fop.close();
                 }
             } catch (IOException e) {
-               logger.error("IOException", e);
+                logger.error("IOException", e);
             }
         }
     }
+
+  
+
+    public static Properties ReadPropFile(String filePath) {
+        Properties prop = new Properties();
+        InputStream input = null;
+        try {
+
+            input = new FileInputStream(filePath);
+
+            // load a properties file
+            prop.load(input);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return prop;
+    }
+
+    public static void WriteToPropFile(Properties property, String filePath) {
+
+        Properties prop = property;
+
+        OutputStream output = null;
+
+        try {
+            output = new FileOutputStream(filePath);
+            // save properties to project root folder
+            prop.store(output, null);
+
+        } catch (IOException io) {
+            io.printStackTrace();
+        } finally {
+            if (output != null) {
+                try {
+                    output.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    }
     
-     public static void PrintClasspath() {
+    
+   
+
+    public static void PrintClasspath() {
         ClassLoader cl = ClassLoader.getSystemClassLoader();
- 
-        URL[] urls = ((URLClassLoader)cl).getURLs();
- 
-        for(URL url: urls){
-        	logger.debug(url);
+
+        URL[] urls = ((URLClassLoader) cl).getURLs();
+
+        for (URL url : urls) {
+            logger.debug(url);
         }
     }
 }
