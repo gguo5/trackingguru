@@ -8,6 +8,7 @@ package com.gguo.trackingguru;
 import com.gguo.util.Utilities;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
@@ -98,6 +99,11 @@ public class Tracking extends javax.swing.JFrame {
             }
         ));
         tracking_table.getTableHeader().setReorderingAllowed(false);
+        tracking_table.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                tracking_tableMouseMoved(evt);
+            }
+        });
         tracking_table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tracking_tableMouseClicked(evt);
@@ -395,7 +401,7 @@ public class Tracking extends javax.swing.JFrame {
             String t_no = (String) target.getValueAt(row, 0);
             String base_url = "http://198.11.173.181/cgi-bin/GInfo.dll?EmmisTrack&w=blueskyexpress&cno=ReplaceMe&cmodel=&ntype=0";
             String url = base_url.replace("ReplaceMe", t_no);
-            System.out.println(url);
+            logger.info("Open chrome window: "+ url);
 
             Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
             if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
@@ -410,6 +416,19 @@ public class Tracking extends javax.swing.JFrame {
         //System.out.println("row: "+row +" col: "+column);
 
     }//GEN-LAST:event_tracking_tableMouseClicked
+
+    private void tracking_tableMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tracking_tableMouseMoved
+        // TODO add your handling code here:
+        JTable target = (JTable) evt.getSource();
+        int row = target.rowAtPoint(evt.getPoint());
+        int column = target.columnAtPoint(evt.getPoint());
+        if (column == 0 || column == 7) {
+            target.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        } else {
+            target.setCursor(Cursor.getDefaultCursor());
+        }
+        //System.out.println("row: "+row +" col: "+column);
+    }//GEN-LAST:event_tracking_tableMouseMoved
 
     /**
      * @param args the command line arguments
