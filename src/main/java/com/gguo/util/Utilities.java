@@ -13,7 +13,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 
@@ -35,8 +34,9 @@ public class Utilities {
         return flag;
     }
 
-    public static String setJTextAreaText() {
-        String filePathString = "C:/TrackingGuru/tn.txt";
+    public static String setJTextAreaText(String tabName) {
+        String rootDir = "C:/TrackingGuru/";
+        String filePathString = rootDir+tabName+".txt";
         String out = "";
         BufferedReader br = null;
         if (fileExist(filePathString)) {
@@ -70,14 +70,16 @@ public class Utilities {
         return out;
     }
 
-    public static void saveJTextAreaToFile(String cleanedTracking) {
+    public static void saveJTextAreaToFile(String cleanedTracking, String tabName) {
         FileOutputStream fop = null;
         File file;
         String content = cleanedTracking;
-
+        
+        String rootDir = "C:/TrackingGuru/";
+        String filePathString = rootDir+tabName+".txt";
         try {
-
-            file = new File("c:/TrackingGuru/tn.txt");
+            
+            file = new File(filePathString);
 
             // if file doesnt exists, then create it
             if (!file.exists()) {
