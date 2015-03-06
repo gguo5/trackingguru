@@ -21,7 +21,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -170,6 +169,11 @@ public class Tracking extends javax.swing.JFrame {
         jMenu2.setText("Settings");
 
         mi_api_setting.setText("API Setting");
+        mi_api_setting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mi_api_settingActionPerformed(evt);
+            }
+        });
         jMenu2.add(mi_api_setting);
 
         jMenuBar1.add(jMenu2);
@@ -218,17 +222,19 @@ public class Tracking extends javax.swing.JFrame {
 
         // TODO add your handling code here:
         String url = "http://track.blueskyexpress.com.au/cgi-bin/GInfo.dll?EmmisTrack";
+        //String url = "http://nz.efspost.net/cgi-bin/GInfo.dll?EmmisTrack";
         String w = "blueskyexpress";
+        //String w = "nzefs";
         String cmodel = "";
         //String cno = tf_tracking_number.getText();
         int ntype = 0;
-        String tracking_no = tf_tracking_number.getText();
+        String tracking_no_input = tf_tracking_number.getText();
         String cleanedTracking = "";
         String errorTracking = "";
         boolean processFlag = false;
         boolean singleNoFlag = false;
-        if (tracking_no.length() > 0) {
-            String[] result = validateTracking(tracking_no);
+        if (tracking_no_input.length() > 0) {
+            String[] result = validateTracking(tracking_no_input);
             cleanedTracking = result[1];
             processFlag = Boolean.valueOf(result[0]);
             singleNoFlag = Boolean.valueOf(result[3]);
@@ -243,6 +249,7 @@ public class Tracking extends javax.swing.JFrame {
                 Utilities.saveJTextAreaToFile(cleanedTracking);
             }
 
+            //process http post
             CloseableHttpClient httpclient = HttpClients.createDefault();
             try {
                 HttpPost httpPost = new HttpPost(url);
@@ -401,7 +408,7 @@ public class Tracking extends javax.swing.JFrame {
             String t_no = (String) target.getValueAt(row, 0);
             String base_url = "http://198.11.173.181/cgi-bin/GInfo.dll?EmmisTrack&w=blueskyexpress&cno=ReplaceMe&cmodel=&ntype=0";
             String url = base_url.replace("ReplaceMe", t_no);
-            logger.info("Open chrome window: "+ url);
+            logger.info("Open chrome window: " + url);
 
             Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
             if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
@@ -428,6 +435,11 @@ public class Tracking extends javax.swing.JFrame {
         }
         //System.out.println("row: "+row +" col: "+column);
     }//GEN-LAST:event_tracking_tableMouseMoved
+
+    private void mi_api_settingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_api_settingActionPerformed
+        // TODO add your handling code here:
+        new APISettingFrame(this).setVisible(true);
+    }//GEN-LAST:event_mi_api_settingActionPerformed
 
     /**
      * @param args the command line arguments
@@ -481,6 +493,10 @@ public class Tracking extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private String[] validateTracking(String tracking_no) {
+        //result[0] is the process flag
+        //result[1] is the valid tracking number string
+        //result[2] is the invalid tracking number string
+        //result[3] is the single tn flag
         String[] result = new String[4];
         boolean process = true;
         String[] trackingNos = tracking_no.split("\\s+|,"); //regex for 1 or more spaces, or comma
@@ -488,7 +504,7 @@ public class Tracking extends javax.swing.JFrame {
         StringBuilder err = new StringBuilder();
         boolean single = false;
         for (String tn : trackingNos) {
-            if (tn.trim().matches("[a-zA-Z]{2}\\d{9}MEL")) {
+            if (tn.trim().matches("[a-zA-Z]{2}\\d{9}MEL")) {  //[a-zA-Z]{2}\\d{9}[a-zA-Z]{2,3}+
                 sb.append(tn);
                 sb.append(" ");
             } else {
@@ -519,5 +535,9 @@ public class Tracking extends javax.swing.JFrame {
             result[2] = err.toString();
         }
         return result;
+    }
+
+    public void ChildFrameTest(String in) {
+        System.out.println(in);
     }
 }

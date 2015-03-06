@@ -77,7 +77,7 @@ public class Tracking_single extends javax.swing.JFrame {
 
         jLabel1.setText("Tracking Number");
 
-        tf_tracking_number.setText("BS666112948MEL");
+        tf_tracking_number.setText("EF613465152AU");
 
         btn_search.setText("Search");
         btn_search.addActionListener(new java.awt.event.ActionListener() {
@@ -215,8 +215,8 @@ public class Tracking_single extends javax.swing.JFrame {
     private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed
 
         // TODO add your handling code here:
-        String url = "http://track.blueskyexpress.com.au/cgi-bin/GInfo.dll?EmmisTrack";
-        String w = "blueskyexpress";
+        String url = "http://nz.efspost.net/cgi-bin/GInfo.dll?EmmisTrack";
+        String w = "nzefs";
         String cmodel = "";
         String cno = tf_tracking_number.getText();
         int ntype = 0;
@@ -314,7 +314,7 @@ public class Tracking_single extends javax.swing.JFrame {
                 }
             }
         } else {
-            new APISettingFrame().setVisible(true);
+            //do something
         }
     }//GEN-LAST:event_btn_searchActionPerformed
 

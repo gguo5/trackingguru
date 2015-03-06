@@ -30,6 +30,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="API Setting"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mi_api_settingActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
