@@ -7,6 +7,7 @@ package com.gguo.trackingguru;
 
 import com.gguo.util.Utilities;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
@@ -17,6 +18,7 @@ import javax.swing.JLabel;
 import org.apache.log4j.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -295,10 +297,19 @@ public class Tracking extends javax.swing.JFrame {
                     }
                     tableData.add(oneRow);
                 }
-                tracking_table.setModel(new DefaultTableModel(tableData, tableHeaders));
+                //create a table model and set cell non-edible
+                DefaultTableModel tableModel = new DefaultTableModel(tableData, tableHeaders) {
+
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        //all cells false
+                        return false;
+                    }
+                };
+                tracking_table.setModel(tableModel);
 
                 //set column width
-                int[] width = {100, 65, 35, 25, 30, 100, 110, 50};
+                int[] width = {100, 65, 35, 25, 35, 100, 110, 50};
                 for (int i = 0; i < tracking_table.getColumnCount(); i++) {
                     tracking_table.getColumnModel().getColumn(i).setPreferredWidth(width[i]);
                 }
@@ -306,12 +317,28 @@ public class Tracking extends javax.swing.JFrame {
                 TableCellRenderer rendererFromHeader = tracking_table.getTableHeader().getDefaultRenderer();
                 JLabel headerLabel = (JLabel) rendererFromHeader;
                 headerLabel.setHorizontalAlignment(JLabel.CENTER);
-                
+
                 //set tn column style
-//                 TableCellEditor cellRederer =  tracking_table.getCellEditor(0, 0);
-//                 tracking_table.gettable
-//                JLabel celltest = (JLabel) first_col;
-//                celltest.setBackground(Color.RED);
+                tracking_table.getColumn(tracking_table.getColumnName(0)).setCellRenderer(new DefaultTableCellRenderer() {
+
+                    @Override
+                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                        setText(value.toString());
+                        setForeground(Color.BLUE);
+
+                        return this;
+                    }
+                });
+
+                tracking_table.getColumn(tracking_table.getColumnName(7)).setCellRenderer(new DefaultTableCellRenderer() {
+
+                    @Override
+                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                        setText(value.toString());
+                        setForeground(Color.BLUE);
+                        return this;
+                    }
+                });
 
                 //            CloseableHttpResponse response2 = httpclient.execute(httpPost);
                 //            try {
