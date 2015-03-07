@@ -112,9 +112,15 @@ public class ComponentControls {
 
     static String getCleanedTrackingString(DefaultListModel tracking_listModel) {
         StringBuilder sb = new StringBuilder();
+        if(tracking_listModel.getSize()>1){
         for (int i = 0; i < tracking_listModel.getSize(); i++) {
             sb.append(tracking_listModel.get(i).toString());
             sb.append(" ");
+        }} else{
+        sb.append(tracking_listModel.get(0).toString());
+        sb.append(" ");
+        sb.append(tracking_listModel.get(0).toString());
+        
         }
         return sb.toString().trim();
     }
@@ -123,7 +129,7 @@ public class ComponentControls {
 
         Document htmlDoc = Jsoup.parse(response);
 
-        Element tableElement = htmlDoc.getElementById("oMHtable");
+        Element tableElement = htmlDoc.getElementById("oMHtable");//if single tn, need to get 2 copy
 
         Vector<String> tableHeaders = new Vector<String>();
         Vector tableData = new Vector();
