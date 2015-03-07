@@ -5,6 +5,7 @@
  */
 package com.gguo.trackingguru;
 
+import com.gguo.util.HttpUtil;
 import com.gguo.util.Utilities;
 import java.awt.Color;
 import java.awt.Component;
@@ -73,9 +74,6 @@ public class Tracking extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tracking_table = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tf_tracking_number = new javax.swing.JTextArea();
-        btn_search = new javax.swing.JButton();
         btn_edit_receiver = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         tracking_list = new javax.swing.JList();
@@ -86,9 +84,6 @@ public class Tracking extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         tracking_table_efs = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        tf_tracking_number_efs = new javax.swing.JTextArea();
-        btn_search_efs = new javax.swing.JButton();
         btn_track_efs = new javax.swing.JButton();
         btn_remove_efs = new javax.swing.JButton();
         btn_edit_receiver1 = new javax.swing.JButton();
@@ -133,35 +128,21 @@ public class Tracking extends javax.swing.JFrame {
 
             }
         ));
+        tracking_table.setName("BlueSky"); // NOI18N
         tracking_table.getTableHeader().setReorderingAllowed(false);
-        tracking_table.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                tracking_tableMouseMoved(evt);
-            }
-        });
         tracking_table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tracking_tableMouseClicked(evt);
             }
         });
+        tracking_table.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                tracking_tableMouseMoved(evt);
+            }
+        });
         jScrollPane2.setViewportView(tracking_table);
 
         jLabel1.setText("Tracking Numbers");
-
-        tf_tracking_number.setColumns(20);
-        tf_tracking_number.setLineWrap(true);
-        tf_tracking_number.setRows(5);
-        tf_tracking_number.setText(Utilities.setJTextAreaText(jpanel_bs.getName()));
-        tf_tracking_number.setToolTipText("Tracking numbers can be separated by either space or comma.");
-        tf_tracking_number.setWrapStyleWord(true);
-        jScrollPane1.setViewportView(tf_tracking_number);
-
-        btn_search.setText("Search");
-        btn_search.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_searchActionPerformed(evt);
-            }
-        });
 
         btn_edit_receiver.setText("Manage");
         btn_edit_receiver.addActionListener(new java.awt.event.ActionListener() {
@@ -221,12 +202,8 @@ public class Tracking extends javax.swing.JFrame {
                                 .addComponent(btn_remove)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btn_addNew))
-                            .addComponent(btn_track, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(123, 123, 123)
-                        .addGroup(jpanel_bsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_search, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(37, Short.MAX_VALUE))
+                            .addComponent(btn_track, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         jpanel_bsLayout.setVerticalGroup(
             jpanel_bsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -236,18 +213,13 @@ public class Tracking extends javax.swing.JFrame {
                     .addGroup(jpanel_bsLayout.createSequentialGroup()
                         .addGroup(jpanel_bsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addGroup(jpanel_bsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(btn_search)
-                                .addComponent(btn_track)))
+                            .addComponent(btn_track))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jpanel_bsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jpanel_bsLayout.createSequentialGroup()
-                                .addComponent(btn_edit_receiver)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jpanel_bsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btn_remove)
-                                    .addComponent(btn_addNew)))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addComponent(btn_edit_receiver)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpanel_bsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btn_remove)
+                            .addComponent(btn_addNew)))
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -266,6 +238,7 @@ public class Tracking extends javax.swing.JFrame {
 
             }
         ));
+        tracking_table_efs.setName("EFS"); // NOI18N
         tracking_table_efs.getTableHeader().setReorderingAllowed(false);
         tracking_table_efs.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -280,21 +253,6 @@ public class Tracking extends javax.swing.JFrame {
         jScrollPane3.setViewportView(tracking_table_efs);
 
         jLabel2.setText("Tracking Numbers");
-
-        tf_tracking_number_efs.setColumns(20);
-        tf_tracking_number_efs.setLineWrap(true);
-        tf_tracking_number_efs.setRows(5);
-        tf_tracking_number_efs.setText(Utilities.setJTextAreaText(jpanel_efs.getName()));
-        tf_tracking_number_efs.setToolTipText("Tracking numbers can be separated by either space or comma.");
-        tf_tracking_number_efs.setWrapStyleWord(true);
-        jScrollPane4.setViewportView(tf_tracking_number_efs);
-
-        btn_search_efs.setText("Search");
-        btn_search_efs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_search_efsActionPerformed(evt);
-            }
-        });
 
         btn_track_efs.setText("Track");
         btn_track_efs.addActionListener(new java.awt.event.ActionListener() {
@@ -354,13 +312,9 @@ public class Tracking extends javax.swing.JFrame {
                                 .addComponent(btn_remove_efs)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btn_addNew_efs))
-                            .addComponent(btn_track_efs, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(58, 58, 58)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_search_efs))
+                            .addComponent(btn_track_efs, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 637, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         jpanel_efsLayout.setVerticalGroup(
             jpanel_efsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -377,9 +331,7 @@ public class Tracking extends javax.swing.JFrame {
                         .addGroup(jpanel_efsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btn_remove_efs)
                             .addComponent(btn_addNew_efs)))
-                    .addComponent(btn_search_efs)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(39, Short.MAX_VALUE))
@@ -427,7 +379,7 @@ public class Tracking extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(trackingTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
+                .addComponent(trackingTabs)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -438,179 +390,6 @@ public class Tracking extends javax.swing.JFrame {
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         setBounds((screenSize.width-713)/2, (screenSize.height-604)/2, 713, 604);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btn_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_searchActionPerformed
-
-        // TODO add your handling code here:
-        String url = "http://track.blueskyexpress.com.au/cgi-bin/GInfo.dll?EmmisTrack";
-        //String url = "http://nz.efspost.net/cgi-bin/GInfo.dll?EmmisTrack";
-        String w = "blueskyexpress";
-        //String w = "nzefs";
-        String cmodel = "";
-        //String cno = tf_tracking_number.getText();
-        int ntype = 0;
-        String tracking_no_input = tf_tracking_number.getText();
-        String cleanedTracking = "";
-        String errorTracking = "";
-        boolean processFlag = false;
-        boolean singleNoFlag = false;
-        if (tracking_no_input.length() > 0) {
-            String[] result = validateTracking(tracking_no_input);
-            cleanedTracking = result[1];
-            processFlag = Boolean.valueOf(result[0]);
-            singleNoFlag = Boolean.valueOf(result[3]);
-            errorTracking = result[2];
-        }
-
-        if (processFlag) {//Utilities.fileExist(APIConfigFilePath)) {
-            //save tn only when valid tracking no(s)
-            if (singleNoFlag) {
-                Utilities.saveJTextAreaToFile(cleanedTracking.substring(0, cleanedTracking.indexOf(" ")), jpanel_bs.getName());
-            } else {
-                Utilities.saveJTextAreaToFile(cleanedTracking, jpanel_bs.getName());
-            }
-
-            //process http post
-            CloseableHttpClient httpclient = HttpClients.createDefault();
-            try {
-                HttpPost httpPost = new HttpPost(url);
-
-                List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-                nvps.add(new BasicNameValuePair("w", w));
-                nvps.add(new BasicNameValuePair("cmodel", cmodel));
-                nvps.add(new BasicNameValuePair("cno", cleanedTracking));
-                nvps.add(new BasicNameValuePair("ntype", String.valueOf(ntype)));
-
-                httpPost.setEntity(new UrlEncodedFormEntity(nvps));
-
-                // Create a custom response handler
-                ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-                    public String handleResponse(
-                            final HttpResponse response) throws ClientProtocolException, IOException {
-                        int status = response.getStatusLine().getStatusCode();
-                        status_label.setText(response.getStatusLine().toString());
-                        if (status >= 200 && status < 300) {
-                            HttpEntity entity = response.getEntity();
-                            return entity != null ? EntityUtils.toString(entity) : null;
-                        } else {
-                            throw new ClientProtocolException("Unexpected response status: " + status);
-                        }
-                    }
-                };
-                String responseBody = httpclient.execute(httpPost, responseHandler);
-                //System.out.println("----------------------------------------");
-                //System.out.println(responseBody);
-
-                //tp_result.setText(responseBody);
-                Document htmlDoc = Jsoup.parse(responseBody);
-//                tracking_number.setText(htmlDoc.getElementById("HeaderNum").text());
-//                tracking_status.setText(htmlDoc.getElementById("HeaderState").text());
-//                tracking_from.setText(htmlDoc.getElementById("HeaderFrom").text());
-//                tracking_to.setText(htmlDoc.getElementById("HeaderDes").text());
-//                tracking_quantity.setText(htmlDoc.getElementById("HeaderItem").text());
-
-                Element tableElement = htmlDoc.getElementById("oMHtable");
-
-                Vector<String> tableHeaders = new Vector<String>();
-                Vector tableData = new Vector();
-
-                for (Element header : tableElement.select("tr:eq(0)")) {
-                    Elements tds = header.select("td:not([rowspan])");//tds without attr=rowspan
-                    for (Element td : tds) {
-                        //System.out.println("header"+td.text());
-                        tableHeaders.add(td.text());
-                    }
-                }
-
-                for (Element row : tableElement.select("tr:gt(0)")) {
-                    Elements tds = row.select("td:not([rowspan])");//tds without attr=rowspan
-                    Vector<Object> oneRow = new Vector<Object>();
-                    for (Element td : tds) {
-                        //System.out.println(td.text());
-                        oneRow.add(td.text());
-                    }
-                    tableData.add(oneRow);
-                }
-                //create a table model and set cell non-edible
-                DefaultTableModel tableModel = new DefaultTableModel(tableData, tableHeaders) {
-                    @Override
-                    public boolean isCellEditable(int row, int column) {
-                        //all cells false
-                        return false;
-                    }
-                };
-                tracking_table.setModel(tableModel);
-
-                //set column width
-                int[] width = {100, 65, 35, 25, 35, 100, 110, 50};
-                for (int i = 0; i < tracking_table.getColumnCount(); i++) {
-                    tracking_table.getColumnModel().getColumn(i).setPreferredWidth(width[i]);
-                }
-                //set table header centre horizontally
-                TableCellRenderer rendererFromHeader = tracking_table.getTableHeader().getDefaultRenderer();
-                JLabel headerLabel = (JLabel) rendererFromHeader;
-                headerLabel.setHorizontalAlignment(JLabel.CENTER);
-
-                //set tn column style
-                tracking_table.getColumn(tracking_table.getColumnName(0)).setCellRenderer(new DefaultTableCellRenderer() {
-                    @Override
-                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                        setText(value.toString());
-                        setForeground(Color.BLUE);
-                        setToolTipText(value.toString());
-                        return this;
-                    }
-                });
-
-                tracking_table.getColumn(tracking_table.getColumnName(7)).setCellRenderer(new DefaultTableCellRenderer() {
-                    @Override
-                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                        setText(value.toString());
-                        setForeground(Color.BLUE);
-                        return this;
-                    }
-                });
-
-                //            CloseableHttpResponse response2 = httpclient.execute(httpPost);
-                //            try {
-                //                System.out.println(response2.getStatusLine());
-                //
-                //                HttpEntity entity2 = response2.getEntity();
-                //                // do something useful with the response body
-                //                // and ensure it is fully consumed
-                //                  tp_result.setText(EntityUtils.toString(entity2));
-                //                  EntityUtils.consume(entity2);
-                //            } catch (IOException ex) {
-                //                Logger.getLogger(Tracking.class.getName()).log(Level.SEVERE, null, ex);
-                //            } finally {
-                //                try {
-                //                    response2.close();
-                //                } catch (IOException ex) {
-                //                    Logger.getLogger(Tracking.class.getName()).log(Level.SEVERE, null, ex);
-                //                }
-                //            }
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Can not connect to host, try again later.");
-                logger.error("IOException", ex);
-            } finally {
-                try {
-                    httpclient.close();
-                } catch (IOException ex) {
-                    logger.error("IOException", ex);
-                }
-            }
-        } else {
-            //new APISettingFrame().setVisible(true);
-            //do sth if not true
-            String str = "";
-            if (errorTracking.length() > 0) {
-                str = "Invalid tracking no(s): " + errorTracking;
-            } else {
-                str = "Tracking No can't be empty!";
-            }
-            JOptionPane.showMessageDialog(null, str);
-        }
-    }//GEN-LAST:event_btn_searchActionPerformed
 
     private void mi_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_exitActionPerformed
         // TODO add your handling code here:
@@ -694,161 +473,6 @@ public class Tracking extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tracking_table_efsMouseClicked
 
-    private void btn_search_efsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_search_efsActionPerformed
-        // TODO add your handling code here:
-        //String url = "http://track.blueskyexpress.com.au/cgi-bin/GInfo.dll?EmmisTrack";
-        String url = "http://nz.efspost.net/cgi-bin/GInfo.dll?EmmisTrack";
-        //String w = "blueskyexpress";
-        String w = "nzefs";
-        String cmodel = "";
-        //String cno = tf_tracking_number.getText();
-        int ntype = 0;
-        String tracking_no_input = tf_tracking_number_efs.getText();
-        String cleanedTracking = "";
-        String errorTracking = "";
-        boolean processFlag = false;
-        boolean singleNoFlag = false;
-        if (tracking_no_input.length() > 0) {
-            String[] result = validateTracking(tracking_no_input);
-            cleanedTracking = result[1];
-            processFlag = Boolean.valueOf(result[0]);
-            singleNoFlag = Boolean.valueOf(result[3]);
-            errorTracking = result[2];
-        }
-
-        if (processFlag) {//Utilities.fileExist(APIConfigFilePath)) {
-            //save tn only when valid tracking no(s)
-            if (singleNoFlag) {
-                Utilities.saveJTextAreaToFile(cleanedTracking.substring(0, cleanedTracking.indexOf(" ")), jpanel_efs.getName());
-            } else {
-                Utilities.saveJTextAreaToFile(cleanedTracking, jpanel_efs.getName());
-            }
-
-            //process http post
-            CloseableHttpClient httpclient = HttpClients.createDefault();
-            try {
-                HttpPost httpPost = new HttpPost(url);
-
-                List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-                nvps.add(new BasicNameValuePair("w", w));
-                nvps.add(new BasicNameValuePair("cmodel", cmodel));
-                nvps.add(new BasicNameValuePair("cno", cleanedTracking));
-                nvps.add(new BasicNameValuePair("ntype", String.valueOf(ntype)));
-
-                httpPost.setEntity(new UrlEncodedFormEntity(nvps));
-
-                // Create a custom response handler
-                ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-                    public String handleResponse(
-                            final HttpResponse response) throws ClientProtocolException, IOException {
-                        int status = response.getStatusLine().getStatusCode();
-                        status_label.setText(response.getStatusLine().toString());
-                        if (status >= 200 && status < 300) {
-                            HttpEntity entity = response.getEntity();
-                            return entity != null ? EntityUtils.toString(entity) : null;
-                        } else {
-                            throw new ClientProtocolException("Unexpected response status: " + status);
-                        }
-                    }
-                };
-                String responseBody = httpclient.execute(httpPost, responseHandler);
-                //System.out.println("----------------------------------------");
-                //System.out.println(responseBody);
-
-                //tp_result.setText(responseBody);
-                Document htmlDoc = Jsoup.parse(responseBody);
-//                tracking_number.setText(htmlDoc.getElementById("HeaderNum").text());
-//                tracking_status.setText(htmlDoc.getElementById("HeaderState").text());
-//                tracking_from.setText(htmlDoc.getElementById("HeaderFrom").text());
-//                tracking_to.setText(htmlDoc.getElementById("HeaderDes").text());
-//                tracking_quantity.setText(htmlDoc.getElementById("HeaderItem").text());
-
-                Element tableElement = htmlDoc.getElementById("oMHtable");
-
-                Vector<String> tableHeaders = new Vector<String>();
-                Vector tableData = new Vector();
-
-                for (Element header : tableElement.select("tr:eq(0)")) {
-                    Elements tds = header.select("td:not([rowspan])");//tds without attr=rowspan
-                    for (Element td : tds) {
-                        //System.out.println("header"+td.text());
-                        tableHeaders.add(td.text());
-                    }
-                }
-
-                for (Element row : tableElement.select("tr:gt(0)")) {
-                    Elements tds = row.select("td:not([rowspan])");//tds without attr=rowspan
-                    Vector<Object> oneRow = new Vector<Object>();
-                    for (Element td : tds) {
-                        //System.out.println(td.text());
-                        oneRow.add(td.text());
-                    }
-                    tableData.add(oneRow);
-                }
-                //create a table model and set cell non-edible
-                DefaultTableModel tableModel = new DefaultTableModel(tableData, tableHeaders) {
-                    @Override
-                    public boolean isCellEditable(int row, int column) {
-                        //all cells false
-                        return false;
-                    }
-                };
-                tracking_table_efs.setModel(tableModel);
-
-                //set column width
-                int[] width = {100, 65, 35, 25, 35, 50};
-                for (int i = 0; i < tracking_table_efs.getColumnCount(); i++) {
-                    tracking_table_efs.getColumnModel().getColumn(i).setPreferredWidth(width[i]);
-                }
-                //set table header centre horizontally
-                TableCellRenderer rendererFromHeader = tracking_table_efs.getTableHeader().getDefaultRenderer();
-                JLabel headerLabel = (JLabel) rendererFromHeader;
-                headerLabel.setHorizontalAlignment(JLabel.CENTER);
-
-                //set tn column style
-                tracking_table_efs.getColumn(tracking_table_efs.getColumnName(0)).setCellRenderer(new DefaultTableCellRenderer() {
-                    @Override
-                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                        setText(value.toString());
-                        setForeground(Color.BLUE);
-
-                        return this;
-                    }
-                });
-
-                tracking_table_efs.getColumn(tracking_table_efs.getColumnName(5)).setCellRenderer(new DefaultTableCellRenderer() {
-                    @Override
-                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                        setText(value.toString());
-                        setForeground(Color.BLUE);
-                        return this;
-                    }
-                });
-
-
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Can not connect to host, try again later.");
-                logger.error("IOException", ex);
-            } finally {
-                try {
-                    httpclient.close();
-                } catch (IOException ex) {
-                    logger.error("IOException", ex);
-                }
-            }
-        } else {
-            //new APISettingFrame().setVisible(true);
-            //do sth if not true
-            String str = "";
-            if (errorTracking.length() > 0) {
-                str = "Invalid tracking no(s): " + errorTracking;
-            } else {
-                str = "Tracking No can't be empty!";
-            }
-            JOptionPane.showMessageDialog(null, str);
-        }
-    }//GEN-LAST:event_btn_search_efsActionPerformed
-
     private void btn_edit_receiverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_edit_receiverActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_edit_receiverActionPerformed
@@ -882,7 +506,19 @@ public class Tracking extends javax.swing.JFrame {
             new AddTracking(this).setVisible(true);
 
         } else {
-            logger.info("list not empty");
+            
+            ComponentControls.displayTrackingDetails(this.getTracking_listModel(),this.getCurrentTabName(),this.getTracking_table(),this);
+            
+            //generate list cno string
+//            String cno = ComponentControls.getCleanedTrackingString(this.getTracking_listModel());
+//            String[] params = HttpUtil.getParams(this.getCurrentTabName());
+//            String response = HttpUtil.POSTRequest(params,cno,this);
+//            this.getTracking_table().setModel(ComponentControls.setJTableModel(response));
+//            ComponentControls.setJTableProperties(this.getTracking_table());
+           
+            
+            
+            
         }
     }//GEN-LAST:event_btn_trackActionPerformed
 
@@ -899,7 +535,8 @@ public class Tracking extends javax.swing.JFrame {
             new AddTracking(this).setVisible(true);
 
         } else {
-            logger.info("list not empty");
+            ComponentControls.displayTrackingDetails(this.getTracking_listModel(),this.getCurrentTabName(),this.getTracking_table(),this);
+            
         }
     }//GEN-LAST:event_btn_track_efsActionPerformed
 
@@ -980,8 +617,6 @@ public class Tracking extends javax.swing.JFrame {
     private javax.swing.JButton btn_edit_receiver1;
     private javax.swing.JButton btn_remove;
     private javax.swing.JButton btn_remove_efs;
-    private javax.swing.JButton btn_search;
-    private javax.swing.JButton btn_search_efs;
     private javax.swing.JButton btn_track;
     private javax.swing.JButton btn_track_efs;
     private javax.swing.JLabel jLabel1;
@@ -990,10 +625,8 @@ public class Tracking extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JPanel jpanel_bs;
@@ -1001,8 +634,6 @@ public class Tracking extends javax.swing.JFrame {
     private javax.swing.JMenuItem mi_api_setting;
     private javax.swing.JMenuItem mi_exit;
     private javax.swing.JLabel status_label;
-    private javax.swing.JTextArea tf_tracking_number;
-    private javax.swing.JTextArea tf_tracking_number_efs;
     private javax.swing.JTabbedPane trackingTabs;
     private javax.swing.JList tracking_list;
     private javax.swing.JList tracking_list_efs;
@@ -1101,6 +732,10 @@ public class Tracking extends javax.swing.JFrame {
         return flag;
     }
 
+    public void setStatusLabelText(String str) {
+        this.status_label.setText(str);
+    }
+
     public enum Logistics {
         BlueSky, EFS
     }
@@ -1137,6 +772,22 @@ public class Tracking extends javax.swing.JFrame {
 
     }
 
+    public JTable getTracking_table() {
+        String str = getCurrentTabName();
+        logi = Logistics.valueOf(str);
+
+        switch (logi) {
+            case BlueSky:
+                return tracking_table;
+            case EFS:
+                return tracking_table_efs;//change this
+            default:
+                return null;
+        }
+       
+    }
+
+  
     public String getCurrentTabName() {
         int index = trackingTabs.getSelectedIndex();
         JPanel component = (JPanel) trackingTabs.getComponent(index);

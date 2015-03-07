@@ -192,5 +192,17 @@ public class Utilities {
         }
     }
 
+    public static String getPropValueByKey(String tableName,String key) {
+       String rootDir = "C:/TrackingGuru/";
+        String filePathString = rootDir + tableName + ".properties";
+        String value = "";
+        Properties props = ReadPropFile(filePathString);
+        if (props.containsKey(key)) {
+             value = props.getProperty(key);
+            } 
+       
+        return value;
+    }
+
    
 }
