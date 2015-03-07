@@ -5,6 +5,7 @@
  */
 package com.gguo.trackingguru;
 
+import java.awt.Color;
 import java.awt.Toolkit;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -123,7 +124,7 @@ public class AddTracking extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtn_cancelActionPerformed
 
     private void jbtn_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_saveActionPerformed
-        String tn = jtf_tn.getText();
+        String tn = jtf_tn.getText().trim();
         String name = jtf_name.getText();
         DefaultListModel listModel = mainTracking.getTracking_listModel();
         JList list = mainTracking.getTracking_list();
@@ -132,34 +133,47 @@ public class AddTracking extends javax.swing.JFrame {
             Toolkit.getDefaultToolkit().beep();
             jtf_tn.requestFocusInWindow();
             jtf_tn.selectAll();
+            warning_label.setForeground(Color.RED);
             warning_label.setText("Tracking number can not be empty or repeated...");
             return;
         }
 
+        if (ComponentControls.validateTrackingNumber(tn, mainTracking.getCurrentTabName())) {
+            int index = list.getSelectedIndex(); //get selected index
+            if (index == -1) { //no selection, so insert at beginning
+                index = 0;
+            } else {           //add after the selected item
+                index++;
+            }
 
-        int index = list.getSelectedIndex(); //get selected index
-        if (index == -1) { //no selection, so insert at beginning
-            index = 0;
-        } else {           //add after the selected item
-            index++;
+            listModel.insertElementAt(tn, index);
+
+            warning_label.setForeground(Color.BLUE);
+            warning_label.setText("tracking number added.");
+
+            //add props
+            ComponentControls.AddNewProperty(tn, name, mainTracking.getCurrentTabName());
+
+
+            //Reset the text field.
+            jtf_tn.requestFocusInWindow();
+            jtf_tn.setText("");
+            jtf_name.setText("");
+
+
+            //Select the new item and make it visible.
+            list.setSelectedIndex(index);
+            list.ensureIndexIsVisible(index);
+
+        } else {
+            Toolkit.getDefaultToolkit().beep();
+            jtf_tn.requestFocusInWindow();
+            jtf_tn.selectAll();
+            warning_label.setForeground(Color.RED);
+            warning_label.setText("Invalid Tracking Number.");
         }
 
-        listModel.insertElementAt(tn, index);
-        warning_label.setText("");
 
-        //add props
-        ComponentControls.AddNewProperty(tn, name, mainTracking.getCurrentTabName());
-        
-
-        //Reset the text field.
-        jtf_tn.requestFocusInWindow();
-        jtf_tn.setText("");
-        jtf_name.setText("");
-
-
-        //Select the new item and make it visible.
-        list.setSelectedIndex(index);
-        list.ensureIndexIsVisible(index);
 
     }//GEN-LAST:event_jbtn_saveActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables

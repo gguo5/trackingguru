@@ -79,7 +79,7 @@ public class Tracking extends javax.swing.JFrame {
         btn_edit_receiver = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         tracking_list = new javax.swing.JList();
-        jButton1 = new javax.swing.JButton();
+        btn_remove = new javax.swing.JButton();
         btn_addNew = new javax.swing.JButton();
         btn_track = new javax.swing.JButton();
         jpanel_efs = new javax.swing.JPanel();
@@ -90,7 +90,7 @@ public class Tracking extends javax.swing.JFrame {
         tf_tracking_number_efs = new javax.swing.JTextArea();
         btn_search_efs = new javax.swing.JButton();
         btn_track_efs = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btn_remove_efs = new javax.swing.JButton();
         btn_edit_receiver1 = new javax.swing.JButton();
         btn_addNew_efs = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -172,6 +172,8 @@ public class Tracking extends javax.swing.JFrame {
 
         tracking_listModel= ComponentControls.setJListModel(jpanel_bs.getName());
         tracking_list.setModel(tracking_listModel);
+        if(tracking_list.getSelectedIndex()==-1){btn_remove.setEnabled(false);
+        }
         tracking_list.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 tracking_listValueChanged(evt);
@@ -179,7 +181,12 @@ public class Tracking extends javax.swing.JFrame {
         });
         jScrollPane5.setViewportView(tracking_list);
 
-        jButton1.setText("X");
+        btn_remove.setText("X");
+        btn_remove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_removeActionPerformed(evt);
+            }
+        });
 
         btn_addNew.setText("+");
         btn_addNew.addActionListener(new java.awt.event.ActionListener() {
@@ -211,7 +218,7 @@ public class Tracking extends javax.swing.JFrame {
                         .addGroup(jpanel_bsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(btn_edit_receiver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpanel_bsLayout.createSequentialGroup()
-                                .addComponent(jButton1)
+                                .addComponent(btn_remove)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btn_addNew))
                             .addComponent(btn_track, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -219,16 +226,13 @@ public class Tracking extends javax.swing.JFrame {
                         .addGroup(jpanel_bsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btn_search, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(260, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         jpanel_bsLayout.setVerticalGroup(
             jpanel_bsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpanel_bsLayout.createSequentialGroup()
                 .addContainerGap(12, Short.MAX_VALUE)
-                .addGroup(jpanel_bsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jpanel_bsLayout.createSequentialGroup()
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGap(14, 14, 14))
+                .addGroup(jpanel_bsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpanel_bsLayout.createSequentialGroup()
                         .addGroup(jpanel_bsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -236,15 +240,16 @@ public class Tracking extends javax.swing.JFrame {
                                 .addComponent(btn_search)
                                 .addComponent(btn_track)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jpanel_bsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jpanel_bsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jpanel_bsLayout.createSequentialGroup()
                                 .addComponent(btn_edit_receiver)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jpanel_bsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jButton1)
+                                    .addComponent(btn_remove)
                                     .addComponent(btn_addNew)))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(6, 6, 6)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -274,7 +279,7 @@ public class Tracking extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(tracking_table_efs);
 
-        jLabel2.setText("Tracking Number");
+        jLabel2.setText("Tracking Numbers");
 
         tf_tracking_number_efs.setColumns(20);
         tf_tracking_number_efs.setLineWrap(true);
@@ -298,7 +303,12 @@ public class Tracking extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("X");
+        btn_remove_efs.setText("X");
+        btn_remove_efs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_remove_efsActionPerformed(evt);
+            }
+        });
 
         btn_edit_receiver1.setText("Manage");
         btn_edit_receiver1.addActionListener(new java.awt.event.ActionListener() {
@@ -316,6 +326,9 @@ public class Tracking extends javax.swing.JFrame {
 
         tracking_listModel_efs= ComponentControls.setJListModel(jpanel_efs.getName());
         tracking_list_efs.setModel(tracking_listModel_efs);
+        if(tracking_list_efs.getSelectedIndex()==-1){btn_remove_efs.setEnabled(false);
+        }
+
         tracking_list_efs.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 tracking_list_efsValueChanged(evt);
@@ -331,9 +344,6 @@ public class Tracking extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jpanel_efsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpanel_efsLayout.createSequentialGroup()
-                        .addGap(258, 258, 258)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 637, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpanel_efsLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -341,44 +351,38 @@ public class Tracking extends javax.swing.JFrame {
                         .addGroup(jpanel_efsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(btn_edit_receiver1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpanel_efsLayout.createSequentialGroup()
-                                .addComponent(jButton2)
+                                .addComponent(btn_remove_efs)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btn_addNew_efs))
                             .addComponent(btn_track_efs, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(59, 59, 59)
+                        .addGap(58, 58, 58)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35)
-                        .addComponent(btn_search_efs)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_search_efs))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 637, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         jpanel_efsLayout.setVerticalGroup(
             jpanel_efsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpanel_efsLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
+            .addGroup(jpanel_efsLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jpanel_efsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpanel_efsLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(jLabel2)
-                        .addGap(112, 112, 112))
-                    .addGroup(jpanel_efsLayout.createSequentialGroup()
-                        .addGroup(jpanel_efsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addGroup(jpanel_efsLayout.createSequentialGroup()
-                                .addGroup(jpanel_efsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jpanel_efsLayout.createSequentialGroup()
-                                        .addComponent(btn_track_efs)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btn_edit_receiver1))
-                                    .addGroup(jpanel_efsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btn_search_efs)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jpanel_efsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jButton2)
-                                    .addComponent(btn_addNew_efs))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addGroup(jpanel_efsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(btn_track_efs))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_edit_receiver1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpanel_efsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btn_remove_efs)
+                            .addComponent(btn_addNew_efs)))
+                    .addComponent(btn_search_efs)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         trackingTabs.addTab("EFS", jpanel_efs);
@@ -423,7 +427,7 @@ public class Tracking extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(trackingTabs)
+                .addComponent(trackingTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -850,11 +854,24 @@ public class Tracking extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_edit_receiverActionPerformed
 
     private void tracking_listValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_tracking_listValueChanged
-        // TODO add your handling code here:
+        if (evt.getValueIsAdjusting() == false) {
+
+            if (this.getTracking_list().getSelectedIndex() == -1) {
+                //No selection, disable fire button.
+                btn_remove.setEnabled(false);
+
+            } else {
+                //Selection, enable the fire button.
+                btn_remove.setEnabled(true);
+            }
+        }
+
 //        JList target = (JList) evt.getSource();
 //        if(target.getModel().getSize()>0){
 //        btn_search.setEnabled(true);
 //        }else{btn_search.setEnabled(false);}
+
+
     }//GEN-LAST:event_tracking_listValueChanged
 
     private void btn_trackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_trackActionPerformed
@@ -876,7 +893,7 @@ public class Tracking extends javax.swing.JFrame {
 
     private void btn_track_efsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_track_efsActionPerformed
         // TODO add your handling code here:
-         if (checkTrackingListEmpty()) {
+        if (checkTrackingListEmpty()) {
             //add tracking number to start
             logger.info("list empty");
             new AddTracking(this).setVisible(true);
@@ -892,12 +909,35 @@ public class Tracking extends javax.swing.JFrame {
 
     private void btn_addNew_efsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addNew_efsActionPerformed
         // TODO add your handling code here:
-          new AddTracking(this).setVisible(true);
+        new AddTracking(this).setVisible(true);
     }//GEN-LAST:event_btn_addNew_efsActionPerformed
 
     private void tracking_list_efsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_tracking_list_efsValueChanged
         // TODO add your handling code here:
+         if (evt.getValueIsAdjusting() == false) {
+
+            if (this.getTracking_list().getSelectedIndex() == -1) {
+                //No selection, disable fire button.
+                btn_remove_efs.setEnabled(false);
+
+            } else {
+                //Selection, enable the fire button.
+                btn_remove_efs.setEnabled(true);
+            }
+        }
     }//GEN-LAST:event_tracking_list_efsValueChanged
+
+    private void btn_removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_removeActionPerformed
+        // TODO add your handling code here:
+        boolean success = removeTracking(this.getTracking_list(), this.getTracking_listModel());
+        logger.info("remove tn? " + success);
+    }//GEN-LAST:event_btn_removeActionPerformed
+
+    private void btn_remove_efsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_remove_efsActionPerformed
+        // TODO add your handling code here:
+        boolean success = removeTracking(this.getTracking_list(), this.getTracking_listModel());
+        logger.info("remove tn? " + success);
+    }//GEN-LAST:event_btn_remove_efsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -938,12 +978,12 @@ public class Tracking extends javax.swing.JFrame {
     private javax.swing.JButton btn_addNew_efs;
     private javax.swing.JButton btn_edit_receiver;
     private javax.swing.JButton btn_edit_receiver1;
+    private javax.swing.JButton btn_remove;
+    private javax.swing.JButton btn_remove_efs;
     private javax.swing.JButton btn_search;
     private javax.swing.JButton btn_search_efs;
     private javax.swing.JButton btn_track;
     private javax.swing.JButton btn_track_efs;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
@@ -1028,16 +1068,48 @@ public class Tracking extends javax.swing.JFrame {
         return empty;
     }
 
-    enum Logistics {
-    BlueSky,EFS
+    private boolean removeTracking(JList tracking_list, DefaultListModel tracking_listModel) {
+        boolean flag = true;
+        //This method can be called only if
+        //there's a valid selection
+        //so go ahead and remove whatever's selected.
+        int index = tracking_list.getSelectedIndex();
+
+        String removedKey = (String) tracking_listModel.get(index);
+        if (ComponentControls.removeProperty(removedKey, this.getCurrentTabName())) {
+            tracking_listModel.remove(index);
+
+            int size = tracking_listModel.getSize();
+
+            if (size == 0) { //Nobody's left, disable firing.
+                btn_remove.setEnabled(false);
+
+            } else { //Select an index.
+                if (index == tracking_listModel.getSize()) {
+                    //removed item in last position
+                    index--;
+                }
+
+                tracking_list.setSelectedIndex(index);
+                tracking_list.ensureIndexIsVisible(index);
+            }
+
+        } else {
+            flag = false;
+        }
+
+        return flag;
     }
-    
+
+    public enum Logistics {
+        BlueSky, EFS
+    }
     public Logistics logi;
-     
+
     public DefaultListModel getTracking_listModel() {
         String str = getCurrentTabName();
         logi = Logistics.valueOf(str);
-        
+
         switch (logi) {
             case BlueSky:
                 return tracking_listModel;
@@ -1053,7 +1125,7 @@ public class Tracking extends javax.swing.JFrame {
     public JList getTracking_list() {
         String str = getCurrentTabName();
         logi = Logistics.valueOf(str);
-        
+
         switch (logi) {
             case BlueSky:
                 return tracking_list;
@@ -1062,7 +1134,7 @@ public class Tracking extends javax.swing.JFrame {
             default:
                 return null;
         }
-       
+
     }
 
     public String getCurrentTabName() {
