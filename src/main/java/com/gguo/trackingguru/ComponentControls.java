@@ -9,14 +9,13 @@ import com.gguo.util.HttpUtil;
 import com.gguo.util.Utilities;
 import java.awt.Color;
 import java.awt.Component;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Properties;
 import java.util.Vector;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -71,6 +70,23 @@ public class ComponentControls {
 
     }
 
+    public static void UpdateProperty(String key, String value, String tabName) {
+
+        String rootDir = "C:/TrackingGuru/";
+        String filePathString = rootDir + tabName + ".properties";
+        Properties prop;
+        if (Utilities.fileExist(filePathString)) {
+            prop = Utilities.ReadPropFile(filePathString);
+        } else {
+            prop = new Properties();
+        }
+        if (prop.containsKey(key)) {
+            prop.setProperty(key, value);
+            Utilities.WriteToPropFile(prop, filePathString);
+        }
+
+    }
+
     static boolean removeProperty(String removedKey, String currentTabName) {
         boolean flag = true;
         String rootDir = "C:/TrackingGuru/";
@@ -112,15 +128,16 @@ public class ComponentControls {
 
     static String getCleanedTrackingString(DefaultListModel tracking_listModel) {
         StringBuilder sb = new StringBuilder();
-        if(tracking_listModel.getSize()>1){
-        for (int i = 0; i < tracking_listModel.getSize(); i++) {
-            sb.append(tracking_listModel.get(i).toString());
+        if (tracking_listModel.getSize() > 1) {
+            for (int i = 0; i < tracking_listModel.getSize(); i++) {
+                sb.append(tracking_listModel.get(i).toString());
+                sb.append(" ");
+            }
+        } else {
+            sb.append(tracking_listModel.get(0).toString());
             sb.append(" ");
-        }} else{
-        sb.append(tracking_listModel.get(0).toString());
-        sb.append(" ");
-        sb.append(tracking_listModel.get(0).toString());
-        
+            sb.append(tracking_listModel.get(0).toString());
+
         }
         return sb.toString().trim();
     }
@@ -179,7 +196,7 @@ public class ComponentControls {
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 setText(value.toString());
                 setForeground(Color.BLUE);
-                setToolTipText(Utilities.getPropValueByKey(table.getName(),value.toString()));
+                setToolTipText(Utilities.getPropValueByKey(table.getName(), value.toString()));
                 return this;
             }
         });
@@ -219,5 +236,59 @@ public class ComponentControls {
         String response = HttpUtil.POSTRequest(params, cno, mainTracking);
         tracking_table.setModel(ComponentControls.setJTableModel(response));
         setJTableProperties(tracking_table);
+    }
+
+    //ManageTracking frame utilities
+    public static TableModel setTrackingNumberJTableModel(Properties props) {
+        Vector<String> tableHeaders = new Vector<String>();
+        Vector tableData = new Vector();
+
+        String[] headerTextArray = new String[]{"Tracking Number", "Recipient"};
+
+
+        for (String header : headerTextArray) {
+            tableHeaders.add(header);
+        }
+
+
+        for (Object key : props.keySet()) {
+            String keyStr = (String) key;
+            String value = props.getProperty(keyStr);
+
+            Vector<Object> oneRow = new Vector<Object>();
+
+            oneRow.add(keyStr);
+            oneRow.add(value);
+
+            tableData.add(oneRow);
+        }
+
+        DefaultTableModel tableModel = new DefaultTableModel(tableData, tableHeaders);
+
+        return tableModel;
+    }
+
+    static void DisplayTrackingManagementTable(JTable propertyTable, final String tabName) {
+        String rootDir = "C:/TrackingGuru/"; //make this a variable in main frame
+        String propertyFilePath = rootDir + tabName + ".properties";
+        Properties prop = Utilities.ReadPropFile(propertyFilePath);
+        propertyTable.setModel(ComponentControls.setTrackingNumberJTableModel(prop));
+        propertyTable.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent evt) {
+                int row = evt.getFirstRow();
+                int column = evt.getColumn();
+                TableModel model = (TableModel) evt.getSource();
+
+                String columnName = model.getColumnName(column);
+                String data = (String) model.getValueAt(row, column);
+                if (columnName.equalsIgnoreCase("Recipient")) {
+                    String key = (String) model.getValueAt(row, column - 1);
+                    UpdateProperty(key, data, tabName);
+                }
+
+
+            }
+        });
     }
 }

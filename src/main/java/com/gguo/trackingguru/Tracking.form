@@ -152,7 +152,7 @@
                               <Component id="jScrollPane5" min="-2" pref="171" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="btn_edit_receiver" max="32767" attributes="0"/>
+                                  <Component id="btn_edit_recipient" max="32767" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="btn_remove" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
@@ -177,7 +177,7 @@
                                   <Component id="btn_track" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btn_edit_receiver" min="-2" max="-2" attributes="0"/>
+                              <Component id="btn_edit_recipient" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="btn_remove" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -226,12 +226,12 @@
                 <Property name="text" type="java.lang.String" value="Tracking Numbers"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="btn_edit_receiver">
+            <Component class="javax.swing.JButton" name="btn_edit_recipient">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Manage"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_edit_receiverActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_edit_recipientActionPerformed"/>
               </Events>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane5">
@@ -307,7 +307,7 @@
                               <Component id="jScrollPane6" min="-2" pref="171" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="btn_edit_receiver1" alignment="1" max="32767" attributes="0"/>
+                                  <Component id="btn_edit_recipient_efs" alignment="1" max="32767" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="btn_remove_efs" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
@@ -333,7 +333,7 @@
                                   <Component id="btn_track_efs" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btn_edit_receiver1" min="-2" max="-2" attributes="0"/>
+                              <Component id="btn_edit_recipient_efs" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="btn_remove_efs" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -398,12 +398,12 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_remove_efsActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="btn_edit_receiver1">
+            <Component class="javax.swing.JButton" name="btn_edit_recipient_efs">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Manage"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_edit_receiver1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_edit_recipient_efsActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btn_addNew_efs">
