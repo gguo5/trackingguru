@@ -63,6 +63,7 @@ public class Tracking extends javax.swing.JFrame {
         tracking_list_efs = new javax.swing.JList();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        mi_import = new javax.swing.JMenuItem();
         mi_exit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         mi_api_setting = new javax.swing.JMenuItem();
@@ -313,6 +314,16 @@ public class Tracking extends javax.swing.JFrame {
         jMenu1.setMnemonic('F');
         jMenu1.setText("File");
 
+        mi_import.setMnemonic('I');
+        mi_import.setText("Import");
+        mi_import.setToolTipText("Import old tracking number text file into new property file");
+        mi_import.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mi_importActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mi_import);
+
         mi_exit.setMnemonic('X');
         mi_exit.setText("Exit");
         mi_exit.addActionListener(new java.awt.event.ActionListener() {
@@ -548,6 +559,10 @@ public class Tracking extends javax.swing.JFrame {
         logger.info("remove tn? " + success);
     }//GEN-LAST:event_btn_remove_efsActionPerformed
 
+    private void mi_importActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_importActionPerformed
+         new ImportTracking(this).setVisible(true);
+    }//GEN-LAST:event_mi_importActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -605,6 +620,7 @@ public class Tracking extends javax.swing.JFrame {
     private javax.swing.JPanel jpanel_efs;
     private javax.swing.JMenuItem mi_api_setting;
     private javax.swing.JMenuItem mi_exit;
+    private javax.swing.JMenuItem mi_import;
     private javax.swing.JLabel status_label;
     private javax.swing.JTabbedPane trackingTabs;
     private javax.swing.JList tracking_list;
@@ -708,6 +724,17 @@ public class Tracking extends javax.swing.JFrame {
         this.status_label.setText(str);
     }
 
+    public void setJListValues(int i, DefaultListModel setJListModel) {
+        tracking_listModel_efs = setJListModel;
+    }
+
+    public void updateTrackingListModel(String tabName, DefaultListModel newListModel) {
+        if(tabName.equalsIgnoreCase("EFS")){
+            tracking_listModel_efs = newListModel;
+        }else {tracking_listModel = newListModel;
+        }
+    }
+
     public enum Logistics {
         BlueSky, EFS
     }
@@ -728,7 +755,37 @@ public class Tracking extends javax.swing.JFrame {
 
 
     }
+    
+     public DefaultListModel getTracking_listModel(String tabName) {
+        
+        logi = Logistics.valueOf(tabName);
 
+        switch (logi) {
+            case BlueSky:
+                return tracking_listModel;
+            case EFS:
+                return tracking_listModel_efs;//change this
+            default:
+                return null;
+        }
+
+
+    }
+    
+      public DefaultListModel getTracking_listModel(int tabNum) {
+        
+        switch (tabNum) {
+            case 0:
+                return tracking_listModel;
+            case 1:
+                return tracking_listModel_efs;//change this
+            default:
+                return null;
+        }
+
+
+    }
+      
     public JList getTracking_list() {
         String str = getCurrentTabName();
         logi = Logistics.valueOf(str);
@@ -743,6 +800,34 @@ public class Tracking extends javax.swing.JFrame {
         }
 
     }
+    
+    public JList getTracking_list(String tabName) {
+        logi = Logistics.valueOf(tabName);
+
+        switch (logi) {
+            case BlueSky:
+                return tracking_list;
+            case EFS:
+                return tracking_list_efs;//change this
+            default:
+                return null;
+        }
+
+    }
+    
+     public JList getTracking_list(int tabNum) {
+        
+        switch (tabNum) {
+            case 0:
+                return tracking_list;
+            case 1:
+                return tracking_list_efs;//change this
+            default:
+                return null;
+        }
+
+    }
+   
 
     public JTable getTracking_table() {
         String str = getCurrentTabName();

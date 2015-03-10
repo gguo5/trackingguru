@@ -9,6 +9,7 @@ import com.gguo.util.HttpUtil;
 import com.gguo.util.Utilities;
 import java.awt.Color;
 import java.awt.Component;
+import java.io.File;
 import java.util.Properties;
 import java.util.Vector;
 import javax.swing.DefaultListModel;
@@ -33,6 +34,8 @@ import org.jsoup.select.Elements;
 public class ComponentControls {
 
     final static Logger logger = Logger.getLogger(ComponentControls.class.getName());
+    
+    final static String PROGRAMROOT = "C:/TrackingGuru/";
 
     public static boolean setSearchBtnIntialStatus(int count) {
         boolean status = count > 0 ? true : false;
@@ -46,6 +49,20 @@ public class ComponentControls {
         String filePathString = rootDir + tabName + ".properties";
         if (Utilities.fileExist(filePathString)) {
             Properties prop = Utilities.ReadPropFile(filePathString);
+            for (String name : prop.stringPropertyNames()) {
+                listModel.addElement(name);
+            }
+        }
+        return listModel;
+    }
+    
+    
+    public static DefaultListModel setJListModel(File propertyFile) {
+        DefaultListModel listModel = new DefaultListModel();
+
+        
+        if (propertyFile.exists() && !propertyFile.isDirectory()) {
+            Properties prop = Utilities.ReadPropFile(propertyFile);
             for (String name : prop.stringPropertyNames()) {
                 listModel.addElement(name);
             }
@@ -231,7 +248,7 @@ public class ComponentControls {
     }
 
     static void displayTrackingDetails(DefaultListModel tracking_listModel, String currentTabName, JTable tracking_table, Tracking mainTracking) {
-        String cno = getCleanedTrackingString(tracking_listModel);
+        String cno = getCleanedTrackingString(mainTracking.getTracking_listModel());
         String[] params = HttpUtil.getParams(currentTabName);
         String response = HttpUtil.POSTRequest(params, cno, mainTracking);
         tracking_table.setModel(ComponentControls.setJTableModel(response));
@@ -290,5 +307,10 @@ public class ComponentControls {
 
             }
         });
+    }
+
+    static File getRootFile() {
+        Utilities.FolderExist(PROGRAMROOT, true);
+        return new File(PROGRAMROOT);
     }
 }

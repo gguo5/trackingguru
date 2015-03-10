@@ -38,20 +38,117 @@ public class Utilities {
         return flag;
     }
     
+   
+
     public static boolean fileExist(String path, boolean create) {
         boolean flag = false;
         File f = new File(path);
         if (f.exists() && !f.isDirectory()) {
             flag = true;
-        } else{
+        } else {
             try {
                 f.createNewFile();
-                flag=true;
+                flag = true;
             } catch (IOException ex) {
                 logger.error("IOException");
             }
         }
         return flag;
+    }
+
+    public static boolean FolderExist(String path, boolean create) {
+        boolean flag = false;
+
+        File theDir = new File(path);
+
+        // if the directory does not exist, create it
+        if (!theDir.exists()) {
+            System.out.println("creating directory: " + path);
+
+            try {
+                theDir.mkdir();
+                flag = true;
+            } catch (SecurityException se) {
+                //handle it
+            }
+            if (flag) {
+                System.out.println("DIR created");
+            }
+        } else {
+            System.out.println("DIR EXIST!");
+            flag = true;
+        }
+        return flag;
+    }
+
+    public static String readFileToString(String filePath) {
+
+        String out = "";
+        BufferedReader br = null;
+        if (fileExist(filePath)) {
+            try {
+                br = new BufferedReader(new FileReader(filePath));
+                StringBuilder sb = new StringBuilder();
+                String line = br.readLine();
+
+                while (line != null) {
+                    sb.append(line);
+                    sb.append(System.getProperty("line.separator"));
+                    line = br.readLine();
+                }
+                out = sb.toString();
+            } catch (FileNotFoundException e) {
+                logger.error("FileNotFoundException", e);
+            } catch (IOException e) {
+                logger.error("IOException", e);
+            } finally {
+                if (br != null) {
+                    try {
+                        br.close();
+                    } catch (IOException ex) {
+                        logger.error("IOException", ex);
+                    }
+                }
+            }
+        } else {
+            logger.info(filePath + " doesn't exists.");
+        }
+        return out;
+    }
+
+    public static String readFileToString(File f) {
+
+        String out = "";
+        BufferedReader br = null;
+        if (f.exists() && !f.isDirectory()) {
+            try {
+                br = new BufferedReader(new FileReader(f));
+                StringBuilder sb = new StringBuilder();
+                String line = br.readLine();
+
+                while (line != null) {
+                    sb.append(line);
+                    sb.append(System.getProperty("line.separator"));
+                    line = br.readLine();
+                }
+                out = sb.toString();
+            } catch (FileNotFoundException e) {
+                logger.error("FileNotFoundException", e);
+            } catch (IOException e) {
+                logger.error("IOException", e);
+            } finally {
+                if (br != null) {
+                    try {
+                        br.close();
+                    } catch (IOException ex) {
+                        logger.error("IOException", ex);
+                    }
+                }
+            }
+        } else {
+            logger.info(f.getAbsolutePath() + " doesn't exists.");
+        }
+        return out;
     }
 
     public static String setJTextAreaText(String tabName) {
@@ -128,14 +225,36 @@ public class Utilities {
         }
     }
 
-  
-
     public static Properties ReadPropFile(String filePath) {
         Properties prop = new Properties();
         InputStream input = null;
         try {
 
             input = new FileInputStream(filePath);
+
+            // load a properties file
+            prop.load(input);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return prop;
+    }
+    
+    public static Properties ReadPropFile(File file) {
+        Properties prop = new Properties();
+        InputStream input = null;
+        try {
+
+            input = new FileInputStream(file);
 
             // load a properties file
             prop.load(input);
@@ -178,9 +297,6 @@ public class Utilities {
 
         }
     }
-    
-    
-   
 
     public static void PrintClasspath() {
         ClassLoader cl = ClassLoader.getSystemClassLoader();
@@ -192,17 +308,15 @@ public class Utilities {
         }
     }
 
-    public static String getPropValueByKey(String tableName,String key) {
-       String rootDir = "C:/TrackingGuru/";
+    public static String getPropValueByKey(String tableName, String key) {
+        String rootDir = "C:/TrackingGuru/";
         String filePathString = rootDir + tableName + ".properties";
         String value = "";
         Properties props = ReadPropFile(filePathString);
         if (props.containsKey(key)) {
-             value = props.getProperty(key);
-            } 
-       
+            value = props.getProperty(key);
+        }
+
         return value;
     }
-
-   
 }
