@@ -76,11 +76,15 @@ public class HttpUtil {
             nvps.add(new BasicNameValuePair("ntype", params[3]));
 
             httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+            httpPost.addHeader("Cache-Control", "max-age=0");
 
             // Create a custom response handler
             ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
                 public String handleResponse(
                         final HttpResponse response) throws ClientProtocolException, IOException {
+                    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+                    //response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+                    //response.setDateHeader("Expires", 0); // Proxies.
                     int status = response.getStatusLine().getStatusCode();
                     mainTracking.setStatusLabelText(response.getStatusLine().toString());
                     if (status >= 200 && status < 300) {
@@ -91,6 +95,9 @@ public class HttpUtil {
                     }
                 }
             };
+            //for debug
+           
+            
             responseBody = httpclient.execute(httpPost, responseHandler);
 
         } catch (IOException ex) {
