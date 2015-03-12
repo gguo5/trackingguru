@@ -14,6 +14,8 @@ import java.util.Properties;
 import java.util.Vector;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -34,7 +36,6 @@ import org.jsoup.select.Elements;
 public class ComponentControls {
 
     final static Logger logger = Logger.getLogger(ComponentControls.class.getName());
-    
     final static String PROGRAMROOT = "C:/TrackingGuru/";
 
     public static boolean setSearchBtnIntialStatus(int count) {
@@ -55,12 +56,11 @@ public class ComponentControls {
         }
         return listModel;
     }
-    
-    
+
     public static DefaultListModel setJListModel(File propertyFile) {
         DefaultListModel listModel = new DefaultListModel();
 
-        
+
         if (propertyFile.exists() && !propertyFile.isDirectory()) {
             Properties prop = Utilities.ReadPropFile(propertyFile);
             for (String name : prop.stringPropertyNames()) {
@@ -312,5 +312,46 @@ public class ComponentControls {
     static File getRootFile() {
         Utilities.FolderExist(PROGRAMROOT, true);
         return new File(PROGRAMROOT);
+    }
+
+    static void removeTrackingNumber(final Tracking mainTracking, JList tracking_list, DefaultListModel tracking_listModel, String tabName) {
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Do you wish to remove this tracking number? Note: changes can not be reverted!", "Remove Tracking Number", JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            boolean success = removeTracking(mainTracking, tracking_list, tracking_listModel,tabName);
+            logger.info("remove tn? " + success);
+        }
+    }
+
+    private static boolean removeTracking(Tracking mainTrack, JList tracking_list, DefaultListModel tracking_listModel, String tabName) {
+        boolean flag = true;
+        //This method can be called only if
+        //there's a valid selection
+        //so go ahead and remove whatever's selected.
+        int index = tracking_list.getSelectedIndex();
+
+        String removedKey = (String) tracking_listModel.get(index);
+        if (removeProperty(removedKey, tabName)) {
+            tracking_listModel.remove(index);
+
+            int size = tracking_listModel.getSize();
+
+            if (size == 0) { //Nobody's left, disable firing.
+                mainTrack.DisableRemoveBtn(tabName);
+
+            } else { //Select an index.
+                if (index == tracking_listModel.getSize()) {
+                    //removed item in last position
+                    index--;
+                }
+
+                tracking_list.setSelectedIndex(index);
+                tracking_list.ensureIndexIsVisible(index);
+            }
+
+        } else {
+            flag = false;
+        }
+
+        return flag;
     }
 }

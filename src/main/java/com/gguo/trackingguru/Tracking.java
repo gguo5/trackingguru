@@ -9,7 +9,9 @@ import java.awt.Cursor;
 import java.awt.Desktop;
 import java.net.URI;
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -456,7 +458,7 @@ public class Tracking extends javax.swing.JFrame {
     }//GEN-LAST:event_tracking_table_efsMouseClicked
 
     private void btn_edit_recipientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_edit_recipientActionPerformed
-       
+
         new ManageTracking(this).setVisible(true);
     }//GEN-LAST:event_btn_edit_recipientActionPerformed
 
@@ -489,19 +491,19 @@ public class Tracking extends javax.swing.JFrame {
             new AddTracking(this).setVisible(true);
 
         } else {
-            
-            ComponentControls.displayTrackingDetails(this.getTracking_listModel(),this.getCurrentTabName(),this.getTracking_table(),this);
-            
+
+            ComponentControls.displayTrackingDetails(this.getTracking_listModel(), this.getCurrentTabName(), this.getTracking_table(), this);
+
             //generate list cno string
 //            String cno = ComponentControls.getCleanedTrackingString(this.getTracking_listModel());
 //            String[] params = HttpUtil.getParams(this.getCurrentTabName());
 //            String response = HttpUtil.POSTRequest(params,cno,this);
 //            this.getTracking_table().setModel(ComponentControls.setJTableModel(response));
 //            ComponentControls.setJTableProperties(this.getTracking_table());
-           
-            
-            
-            
+
+
+
+
         }
     }//GEN-LAST:event_btn_trackActionPerformed
 
@@ -518,13 +520,13 @@ public class Tracking extends javax.swing.JFrame {
             new AddTracking(this).setVisible(true);
 
         } else {
-            ComponentControls.displayTrackingDetails(this.getTracking_listModel(),this.getCurrentTabName(),this.getTracking_table(),this);
-            
+            ComponentControls.displayTrackingDetails(this.getTracking_listModel(), this.getCurrentTabName(), this.getTracking_table(), this);
+
         }
     }//GEN-LAST:event_btn_track_efsActionPerformed
 
     private void btn_edit_recipient_efsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_edit_recipient_efsActionPerformed
-           new ManageTracking(this).setVisible(true);
+        new ManageTracking(this).setVisible(true);
     }//GEN-LAST:event_btn_edit_recipient_efsActionPerformed
 
     private void btn_addNew_efsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addNew_efsActionPerformed
@@ -534,7 +536,7 @@ public class Tracking extends javax.swing.JFrame {
 
     private void tracking_list_efsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_tracking_list_efsValueChanged
         // TODO add your handling code here:
-         if (evt.getValueIsAdjusting() == false) {
+        if (evt.getValueIsAdjusting() == false) {
 
             if (this.getTracking_list().getSelectedIndex() == -1) {
                 //No selection, disable fire button.
@@ -548,19 +550,24 @@ public class Tracking extends javax.swing.JFrame {
     }//GEN-LAST:event_tracking_list_efsValueChanged
 
     private void btn_removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_removeActionPerformed
-        // TODO add your handling code here:
-        boolean success = removeTracking(this.getTracking_list(), this.getTracking_listModel());
-        logger.info("remove tn? " + success);
+        ComponentControls.removeTrackingNumber(this, this.getTracking_list(), this.getTracking_listModel(), this.getCurrentTabName());
+        //        int dialogResult = JOptionPane.showConfirmDialog(trackingTabs, "Do you wish to remove this tracking number? Note: changes can not be reverted!","Remove Tracking Number",JOptionPane.YES_NO_OPTION);
+//        if(dialogResult == JOptionPane.YES_OPTION){
+//        boolean success = removeTracking(this.getTracking_list(), this.getTracking_listModel());
+//        logger.info("remove tn? " + success);
+//        } 
     }//GEN-LAST:event_btn_removeActionPerformed
 
     private void btn_remove_efsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_remove_efsActionPerformed
-        // TODO add your handling code here:
-        boolean success = removeTracking(this.getTracking_list(), this.getTracking_listModel());
-        logger.info("remove tn? " + success);
+        ComponentControls.removeTrackingNumber(this, this.getTracking_list(), this.getTracking_listModel(), this.getCurrentTabName());
+
+        //        // TODO add your handling code here:
+//        boolean success = removeTracking(this.getTracking_list(), this.getTracking_listModel());
+//        logger.info("remove tn? " + success);
     }//GEN-LAST:event_btn_remove_efsActionPerformed
 
     private void mi_importActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_importActionPerformed
-         new ImportTracking(this).setVisible(true);
+        new ImportTracking(this).setVisible(true);
     }//GEN-LAST:event_mi_importActionPerformed
 
     /**
@@ -729,13 +736,30 @@ public class Tracking extends javax.swing.JFrame {
     }
 
     public void updateTrackingListModel(String tabName, DefaultListModel newListModel) {
-        if(tabName.equalsIgnoreCase("EFS")){
+        if (tabName.equalsIgnoreCase("EFS")) {
             tracking_listModel_efs = newListModel;
-        }else {tracking_listModel = newListModel;
+        } else {
+            tracking_listModel = newListModel;
+        }
+    }
+
+    public void DisableRemoveBtn(String tabName) {
+        logi = Logistics.valueOf(tabName);
+
+        switch (logi) {
+            case BlueSky:
+                btn_remove.setEnabled(false);
+                break;
+            case EFS:
+                btn_remove_efs.setEnabled(false);
+                break;
+            default:
+                break;
         }
     }
 
     public enum Logistics {
+
         BlueSky, EFS
     }
     public Logistics logi;
@@ -755,9 +779,9 @@ public class Tracking extends javax.swing.JFrame {
 
 
     }
-    
-     public DefaultListModel getTracking_listModel(String tabName) {
-        
+
+    public DefaultListModel getTracking_listModel(String tabName) {
+
         logi = Logistics.valueOf(tabName);
 
         switch (logi) {
@@ -771,9 +795,9 @@ public class Tracking extends javax.swing.JFrame {
 
 
     }
-    
-      public DefaultListModel getTracking_listModel(int tabNum) {
-        
+
+    public DefaultListModel getTracking_listModel(int tabNum) {
+
         switch (tabNum) {
             case 0:
                 return tracking_listModel;
@@ -785,7 +809,7 @@ public class Tracking extends javax.swing.JFrame {
 
 
     }
-      
+
     public JList getTracking_list() {
         String str = getCurrentTabName();
         logi = Logistics.valueOf(str);
@@ -800,7 +824,7 @@ public class Tracking extends javax.swing.JFrame {
         }
 
     }
-    
+
     public JList getTracking_list(String tabName) {
         logi = Logistics.valueOf(tabName);
 
@@ -814,9 +838,9 @@ public class Tracking extends javax.swing.JFrame {
         }
 
     }
-    
-     public JList getTracking_list(int tabNum) {
-        
+
+    public JList getTracking_list(int tabNum) {
+
         switch (tabNum) {
             case 0:
                 return tracking_list;
@@ -827,7 +851,6 @@ public class Tracking extends javax.swing.JFrame {
         }
 
     }
-   
 
     public JTable getTracking_table() {
         String str = getCurrentTabName();
@@ -841,10 +864,9 @@ public class Tracking extends javax.swing.JFrame {
             default:
                 return null;
         }
-       
+
     }
 
-  
     public String getCurrentTabName() {
         int index = trackingTabs.getSelectedIndex();
         JPanel component = (JPanel) trackingTabs.getComponent(index);
