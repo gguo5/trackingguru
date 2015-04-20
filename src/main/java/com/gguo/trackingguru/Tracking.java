@@ -5,6 +5,7 @@
  */
 package com.gguo.trackingguru;
 
+import com.gguo.ftp.UploadGUI;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.net.URI;
@@ -69,6 +70,7 @@ public class Tracking extends javax.swing.JFrame {
         mi_exit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         mi_api_setting = new javax.swing.JMenuItem();
+        mi_upload = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tracking Guru");
@@ -349,6 +351,15 @@ public class Tracking extends javax.swing.JFrame {
         });
         jMenu2.add(mi_api_setting);
 
+        mi_upload.setMnemonic('u');
+        mi_upload.setText("File Upload");
+        mi_upload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mi_uploadActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mi_upload);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -570,6 +581,11 @@ public class Tracking extends javax.swing.JFrame {
         new ImportTracking(this).setVisible(true);
     }//GEN-LAST:event_mi_importActionPerformed
 
+    private void mi_uploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_uploadActionPerformed
+        // TODO add your handling code here:
+        new UploadGUI().setVisible(true);
+    }//GEN-LAST:event_mi_uploadActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -628,6 +644,7 @@ public class Tracking extends javax.swing.JFrame {
     private javax.swing.JMenuItem mi_api_setting;
     private javax.swing.JMenuItem mi_exit;
     private javax.swing.JMenuItem mi_import;
+    private javax.swing.JMenuItem mi_upload;
     private javax.swing.JLabel status_label;
     private javax.swing.JTabbedPane trackingTabs;
     private javax.swing.JList tracking_list;
