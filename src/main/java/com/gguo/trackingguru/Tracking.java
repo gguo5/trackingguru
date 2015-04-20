@@ -371,8 +371,8 @@ public class Tracking extends javax.swing.JFrame {
 
         trackingTabs.getAccessibleContext().setAccessibleName("");
 
-        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-713)/2, (screenSize.height-604)/2, 713, 604);
+        setSize(new java.awt.Dimension(713, 604));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void mi_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_exitActionPerformed
