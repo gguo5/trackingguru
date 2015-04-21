@@ -96,7 +96,7 @@ public class FTPUtility {
             }
             logger.info("successfully set file type to binary.");
             
-            outputStream = ftpClient.storeFileStream(uploadFile.getName());
+            outputStream = ftpClient.storeFileStream(uploadFile.getName().replace(".properties", ".json"));
             
 
         } catch (IOException ex) {

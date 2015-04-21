@@ -5,8 +5,9 @@
  */
 package com.gguo.ftp;
 
+import com.gguo.util.Utilities;
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
@@ -46,22 +47,30 @@ public class UploadTask extends SwingWorker<Void, Void> {
         try {
             util.connect();
             util.uploadFile(uploadFile, destDir);
-             
-            FileInputStream inputStream = new FileInputStream(uploadFile);
+            
+            
+            
+            //FileInputStream inputStream = new FileInputStream(uploadFile);
+            
+            String tnStr = Utilities.getTrackingNumnberJSONString(uploadFile.getAbsolutePath());
+            ByteArrayInputStream is = new ByteArrayInputStream(tnStr.getBytes());
+            
+            
             byte[] buffer = new byte[BUFFER_SIZE];
             int bytesRead = -1;
             long totalBytesRead = 0;
             int percentCompleted = 0;
-            long fileSize = uploadFile.length();
+            long fileSize = tnStr.length();
+            //long fileSize = uploadFile.length();
  
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
+            while ((bytesRead = is.read(buffer)) != -1) {
                 util.writeFileBytes(buffer, 0, bytesRead);
                 totalBytesRead += bytesRead;
                 percentCompleted = (int) (totalBytesRead * 100 / fileSize);
                 setProgress(percentCompleted);
             }
  
-            inputStream.close();
+            is.close();
              
             util.finish();
         } catch (FTPException ex) {

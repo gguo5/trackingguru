@@ -16,10 +16,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Enumeration;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import javax.swing.DefaultListModel;
 import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -37,8 +40,6 @@ public class Utilities {
         }
         return flag;
     }
-    
-   
 
     public static boolean fileExist(String path, boolean create) {
         boolean flag = false;
@@ -248,7 +249,7 @@ public class Utilities {
         }
         return prop;
     }
-    
+
     public static Properties ReadPropFile(File file) {
         Properties prop = new Properties();
         InputStream input = null;
@@ -318,5 +319,31 @@ public class Utilities {
         }
 
         return value;
+    }
+
+    private static String getTrackingNumnberConcatString(String absolutePath) {
+        StringBuilder sb = new StringBuilder();
+        Properties prop = ReadPropFile(absolutePath);
+        Enumeration<Object> keys = prop.keys();
+        while (keys.hasMoreElements()) {
+            sb.append(keys.nextElement());
+            sb.append(",");
+        }
+        return sb.substring(0, sb.length() - 1);
+    }
+
+    public static String getTrackingNumnberJSONString(String absolutePath) {
+        
+        String tn = getTrackingNumnberConcatString(absolutePath);
+        JSONObject obj = new JSONObject();
+        obj.put("tn", tn);
+        obj.put("company", getCompanyNameFromAbsolutePath(absolutePath));
+        
+        return obj.toJSONString();
+    }
+
+    public static String getCompanyNameFromAbsolutePath(String absolutePath) {
+        String newStr = absolutePath.substring(absolutePath.lastIndexOf("\\") + 1, absolutePath.indexOf("."));
+        return newStr;
     }
 }
