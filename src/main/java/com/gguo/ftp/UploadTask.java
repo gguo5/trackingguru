@@ -37,7 +37,17 @@ public class UploadTask extends SwingWorker<Void, Void> {
         this.uploadFile = uploadFile;
         this.mainFrame = guiFrame;
     }
+
+    public UploadTask() {
+         this.host = "ftp.guangzeguo.com";
+        this.port = 21;
+        this.username = "dianzhang@guangzeguo.com";
+        this.password = "k,y_s_Ia*kUU";
+        this.destDir = "/upload";
+        this.uploadFile = new File("C:\\TrackingGuru\\BlueSky.properties");     
+    }
  
+    
     /**
      * Executed in background thread
      */
@@ -95,7 +105,9 @@ public class UploadTask extends SwingWorker<Void, Void> {
 //            JOptionPane.showMessageDialog(null,
 //                    "File has been uploaded successfully!", "Message",
 //                    JOptionPane.INFORMATION_MESSAGE);
+            if(mainFrame != null){
             mainFrame.setInfoLabelText("File has been uploaded successfully!");
+            }
         }
     }  
 }

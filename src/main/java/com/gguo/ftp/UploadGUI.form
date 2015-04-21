@@ -60,9 +60,9 @@
                           <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="fieldUser" max="32767" attributes="0"/>
-                                  <Component id="fieldFileName" alignment="0" min="-2" pref="254" max="-2" attributes="0"/>
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="fieldFileName" alignment="0" min="-2" pref="254" max="-2" attributes="0"/>
                                           <Component id="fieldUploadPath" alignment="0" min="-2" pref="96" max="-2" attributes="0"/>
                                           <Component id="fieldHost" alignment="0" min="-2" pref="131" max="-2" attributes="0"/>
                                           <Group type="102" alignment="0" attributes="0">

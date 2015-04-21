@@ -6,11 +6,14 @@
 package com.gguo.trackingguru;
 
 import com.gguo.ftp.UploadGUI;
+import com.gguo.ftp.UploadOnExit;
+import com.gguo.ftp.UploadTask;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.net.URI;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -70,8 +73,13 @@ public class Tracking extends javax.swing.JFrame {
         mi_api_setting = new javax.swing.JMenuItem();
         mi_upload = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Tracking Guru");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
 
@@ -386,7 +394,7 @@ public class Tracking extends javax.swing.JFrame {
 
     private void mi_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_exitActionPerformed
         // TODO add your handling code here:
-        System.exit(0);
+       ClosingProgram();
     }//GEN-LAST:event_mi_exitActionPerformed
 
     private void tracking_tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tracking_tableMouseClicked
@@ -489,7 +497,6 @@ public class Tracking extends javax.swing.JFrame {
 //        btn_search.setEnabled(true);
 //        }else{btn_search.setEnabled(false);}
 
-
     }//GEN-LAST:event_tracking_listValueChanged
 
     private void btn_trackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_trackActionPerformed
@@ -509,10 +516,6 @@ public class Tracking extends javax.swing.JFrame {
 //            String response = HttpUtil.POSTRequest(params,cno,this);
 //            this.getTracking_table().setModel(ComponentControls.setJTableModel(response));
 //            ComponentControls.setJTableProperties(this.getTracking_table());
-
-
-
-
         }
     }//GEN-LAST:event_btn_trackActionPerformed
 
@@ -583,6 +586,11 @@ public class Tracking extends javax.swing.JFrame {
         // TODO add your handling code here:
         new UploadGUI().setVisible(true);
     }//GEN-LAST:event_mi_uploadActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        ClosingProgram();
+
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -773,6 +781,24 @@ public class Tracking extends javax.swing.JFrame {
         }
     }
 
+    private void ClosingProgram() {
+        // TODO add your handling code here:
+        int result = JOptionPane.showOptionDialog(null,
+                "老婆婆是大笨蛋蛋:p",
+                "Closing...",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                new String[]{"我是", "我不是！"}, // this is the array
+                "default");
+        if (result == JOptionPane.OK_OPTION) {
+            this.setVisible(false);
+            UploadOnExit.Save();
+            logger.info("JSON file uploaded, system closing...");
+            System.exit(0);
+        }
+    }
+
     public enum Logistics {
 
         BlueSky, EFS
@@ -792,7 +818,6 @@ public class Tracking extends javax.swing.JFrame {
                 return null;
         }
 
-
     }
 
     public DefaultListModel getTracking_listModel(String tabName) {
@@ -808,7 +833,6 @@ public class Tracking extends javax.swing.JFrame {
                 return null;
         }
 
-
     }
 
     public DefaultListModel getTracking_listModel(int tabNum) {
@@ -821,7 +845,6 @@ public class Tracking extends javax.swing.JFrame {
             default:
                 return null;
         }
-
 
     }
 
