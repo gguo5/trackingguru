@@ -784,12 +784,12 @@ public class Tracking extends javax.swing.JFrame {
     private void ClosingProgram() {
         // TODO add your handling code here:
         int result = JOptionPane.showOptionDialog(null,
-                "老婆婆是大笨蛋蛋:p",
+                "老婆婆爱我咩:p",
                 "Closing...",
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.INFORMATION_MESSAGE,
                 null,
-                new String[]{"我是", "我不是！"}, // this is the array
+                new String[]{"爱，爱死了！", "怎么能不爱捏"}, // this is the array
                 "default");
         if (result == JOptionPane.OK_OPTION) {
             this.setVisible(false);
