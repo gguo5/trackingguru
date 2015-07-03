@@ -60,7 +60,6 @@ public class ComponentControls {
     public static DefaultListModel setJListModel(File propertyFile) {
         DefaultListModel listModel = new DefaultListModel();
 
-
         if (propertyFile.exists() && !propertyFile.isDirectory()) {
             Properties prop = Utilities.ReadPropFile(propertyFile);
             for (String name : prop.stringPropertyNames()) {
@@ -251,8 +250,13 @@ public class ComponentControls {
         String cno = getCleanedTrackingString(mainTracking.getTracking_listModel());
         String[] params = HttpUtil.getParams(currentTabName);
         String response = HttpUtil.POSTRequest(params, cno, mainTracking);
-        tracking_table.setModel(ComponentControls.setJTableModel(response));
-        setJTableProperties(tracking_table);
+        if (response.contains("错误")) {
+            JOptionPane.showMessageDialog(null, "无效资源请求", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            tracking_table.setModel(ComponentControls.setJTableModel(response));
+            setJTableProperties(tracking_table);
+        }
+
     }
 
     //ManageTracking frame utilities
@@ -262,11 +266,9 @@ public class ComponentControls {
 
         String[] headerTextArray = new String[]{"Tracking Number", "Recipient"};
 
-
         for (String header : headerTextArray) {
             tableHeaders.add(header);
         }
-
 
         for (Object key : props.keySet()) {
             String keyStr = (String) key;
@@ -304,7 +306,6 @@ public class ComponentControls {
                     UpdateProperty(key, data, tabName);
                 }
 
-
             }
         });
     }
@@ -317,7 +318,7 @@ public class ComponentControls {
     static void removeTrackingNumber(final Tracking mainTracking, JList tracking_list, DefaultListModel tracking_listModel, String tabName) {
         int dialogResult = JOptionPane.showConfirmDialog(null, "Do you wish to remove this tracking number? Note: changes can not be reverted!", "Remove Tracking Number", JOptionPane.YES_NO_OPTION);
         if (dialogResult == JOptionPane.YES_OPTION) {
-            boolean success = removeTracking(mainTracking, tracking_list, tracking_listModel,tabName);
+            boolean success = removeTracking(mainTracking, tracking_list, tracking_listModel, tabName);
             logger.info("remove tn? " + success);
         }
     }
