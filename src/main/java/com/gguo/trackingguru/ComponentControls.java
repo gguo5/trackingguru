@@ -130,7 +130,7 @@ public class ComponentControls {
         String regex = "";
         switch (logi) {
             case BlueSky:
-                regex = "B[a-zA-Z]\\d{5,9}(MEL)?";//BM079985   B[a-zA-Z]\\d{5,9}(MEL)?  BS\\d{9}MEL
+                regex = "[a-zA-Z]+\\d{5,9}(MEL)?";//BM079985   B[a-zA-Z]\\d{5,9}(MEL)?  BS\\d{9}MEL
                 break;
 
             case EFS:

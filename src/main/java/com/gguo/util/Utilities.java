@@ -18,9 +18,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
 import java.util.Properties;
-import java.util.Set;
-import java.util.logging.Level;
-import javax.swing.DefaultListModel;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 
